@@ -3,18 +3,24 @@ ADD_USER
 } from "@/store/muation-types";
 
 const state = {
-    me: {
-        name: null
+    data: {
+        username: null,
+        fullName: null,
     }
 }
 
 const mutations = {
     [ADD_USER] (state, profile) {
-        state.me = {...state.me, ...profile}
+        state.data = {...state.me, ...profile}
     }
 }
+
+const actions = {
+}
+
 
 export default {
     state,
     mutations,
+    actions
 }

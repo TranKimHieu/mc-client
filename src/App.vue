@@ -1,17 +1,13 @@
 <template>
-  <router-link to="/bar">Go to Bar</router-link>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-  <router-view></router-view>
+  <div>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
 }
 </script>
 

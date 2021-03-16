@@ -1,18 +1,16 @@
 <template>
   <div>
-    <input v-model="name"/>
-    <button @click="submit">Click</button>
-    <p>{{profile.me.name}}</p>
+      <h1>Home</h1>
+    <button @click="logout">Logout</button>
   </div>
 </template>
 
 <script>
-// const { mapState } = createNamespacedHelpers('')
-import {ADD_USER} from "@/store/muation-types";
-import { mapMutations, mapState } from 'vuex'
-
+import {mapActions} from 'vuex'
+import {AUTH} from "@/store/action-types";
+import {removeToken} from "@/helper/auth";
 export default {
-  name: 'HelloWorld',
+  name: 'Home',
   data(){
     return {
       name: null
@@ -22,16 +20,19 @@ export default {
     msg: String
   },
   methods: {
-    submit(){
-      this.ADD_USER({name: this.name})
-      console.log(this.name)
+    logout(){
+      this[AUTH.LOGOUT]().then(() => {
+        removeToken()
+      }).then(() => {
+        this.$router.push({name: 'login'})
+      })
     },
-    ...mapMutations([
-        ADD_USER
+    ...mapActions([
+        AUTH.LOGOUT
     ])
   },
   computed: {
-    ...mapState(['profile'])
+
   }
 }
 </script>
