@@ -1,8 +1,10 @@
-import { createStore } from 'vuex'
 import profile from './modules/profile';
 import auth from './modules/auth'
+import Vue from 'vue'
+import Vuex from 'vuex'
+Vue.use(Vuex)
 
-export default createStore({
+export default new Vuex.Store({
     modules: {
         profile,
         auth

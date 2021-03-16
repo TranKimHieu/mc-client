@@ -2,6 +2,7 @@
   <div>
       <h1>Home</h1>
     <button @click="logout">Logout</button>
+    <FullCalendar :options="calendarOptions"/>
   </div>
 </template>
 
@@ -9,11 +10,22 @@
 import {mapActions} from 'vuex'
 import {AUTH} from "@/store/action-types";
 import {removeToken} from "@/helper/auth";
+import FullCalendar from '@fullcalendar/vue'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
+
 export default {
   name: 'Home',
+  components: {
+    FullCalendar
+  },
   data(){
     return {
-      name: null
+      name: null,
+      calendarOptions: {
+        plugins: [ dayGridPlugin, interactionPlugin ],
+        initialView: 'dayGridMonth'
+      }
     }
   },
   props: {
@@ -39,18 +51,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
