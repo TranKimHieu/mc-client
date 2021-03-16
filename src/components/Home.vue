@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1>Home</h1>
+    <h1>Home</h1>
     <button @click="logout">Logout</button>
     <FullCalendar :options="calendarOptions"/>
   </div>
@@ -13,39 +13,53 @@ import {removeToken} from "@/helper/auth";
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import timeGridPlugin from '@fullcalendar/timegrid'
 
 export default {
   name: 'Home',
   components: {
     FullCalendar
   },
-  data(){
+  data() {
     return {
       name: null,
       calendarOptions: {
-        plugins: [ dayGridPlugin, interactionPlugin ],
-        initialView: 'dayGridMonth'
-      }
+        plugins: [dayGridPlugin,
+          timeGridPlugin,
+          interactionPlugin],
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        initialView: 'dayGridMonth',
+        dateClick: this.handleDateClick,
+        events: [
+          { title: 'event 1', date: '2021-03-16' },
+          { title: 'event 2', date: '2021-03-17' }
+        ],
+      },
     }
   },
   props: {
     msg: String
   },
   methods: {
-    logout(){
+    logout() {
       this[AUTH.LOGOUT]().then(() => {
         removeToken()
       }).then(() => {
         this.$router.push({name: 'login'})
       })
     },
+    handleDateClick: function(arg) {
+      alert('date click! ' + arg.dateStr)
+    },
     ...mapActions([
-        AUTH.LOGOUT
+      AUTH.LOGOUT
     ])
   },
-  computed: {
-
-  }
+  computed: {}
 }
 </script>
 

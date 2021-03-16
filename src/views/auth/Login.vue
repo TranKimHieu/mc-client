@@ -26,7 +26,7 @@ export default {
         this[ADD_USER]({username: "hieutk", fullName: "tran kim hieu"})
         setToken(data.token)
       }).then(() => {
-        this.$router.push({name: 'home'})
+        this.$router.push({name: 'schedule'})
       })
     },
     ...mapActions([
