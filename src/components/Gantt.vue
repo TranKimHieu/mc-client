@@ -12,21 +12,20 @@ export default {
       default () {
         return {data: [], links: []}
       }
-    }
+    },
+    unit: null
   },
 
   methods: {
-    $_initGanttEvents: function() {
-      // eslint-disable-next-line no-undef
+     $_initGanttEvents(){
       if (!gantt.$_eventsInitialized) {
-        // eslint-disable-next-line no-undef
         gantt.attachEvent('onTaskSelected', (id) => {
           // eslint-disable-next-line no-undef
           let task = gantt.getTask(id);
+
           this.$emit('task-selected', task);
         });
 
-        // eslint-disable-next-line no-undef
         gantt.attachEvent('onTaskIdChange', (id, new_id) => {
           // eslint-disable-next-line no-undef
           if (gantt.getSelectedId() == new_id) {
@@ -40,28 +39,48 @@ export default {
       }
     },
 
-    $_initDataProcessor: function() {
-      // eslint-disable-next-line no-undef
+    $_initDataProcessor() {
       if (!gantt.$_dataProcessorInitialized) {
-        // eslint-disable-next-line no-undef
         gantt.createDataProcessor((entity, action, data, id) => {
           this.$emit(`${entity}-updated`, id, action, data);
         });
 
-        // eslint-disable-next-line no-undef
         gantt.$_dataProcessorInitialized = true;
       }
+    },
+
+    $_configGannt() {
+      gantt.templates.task_text = (start,end,task) => {
+        return "<b>Text:</b> "+task.text+",<b> Holders:</b> "+task.users;
+      }
+    },
+  },
+
+  watch: {
+    unit: function (unit){
+      let format = "%j, %D"
+      switch (unit) {
+        case 'month':
+          format = "%F, %Y"
+          break;
+        case 'day':
+          format = "%j, %D"
+          break;
+      }
+      gantt.config.scales = [
+        {unit: unit, step: 1, format: format},
+      ];
+      gantt.render();
     }
   },
 
   mounted: function () {
+    this.$_configGannt();
     this.$_initGanttEvents();
-    // eslint-disable-next-line no-undef
     gantt.config.xml_date = "%Y-%m-%d";
 
-    // eslint-disable-next-line no-undef
     gantt.init(this.$refs.gantt);
-    // eslint-disable-next-line no-undef
+
     gantt.parse(this.$props.tasks);
 
     this.$_initDataProcessor();

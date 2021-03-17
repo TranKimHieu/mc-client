@@ -1,6 +1,8 @@
 <template>
   <div class="container">
     <div class="right-container">
+      <button @click="changeUnit('month')">UnitMonth</button>
+      <button @click="changeUnit('day')">UnitDay</button>
       <div class="gantt-selected-info">
         <div v-if="selectedTask">
           <h2>{{ selectedTask.text }}</h2>
@@ -17,13 +19,15 @@
         <li v-bind:key="message" class="gantt-message" v-for="message in messages">{{ message }}</li>
       </ul>
     </div>
-    <Gantt class="left-container" :tasks="tasks" @task-updated="logTaskUpdate" @link-updated="logLinkUpdate"
+
+    <Gantt :unit="unit" class="left-container" :tasks="tasks" @task-updated="logTaskUpdate" @link-updated="logLinkUpdate"
            @task-selected="selectTask"></Gantt>
   </div>
 </template>
 
 <script>
-import Gantt from '../components/Gantt';
+  import 'dhtmlx-gantt'
+  import Gantt from '../components/Gantt';
 
 export default {
   name: 'schedule',
@@ -35,13 +39,14 @@ export default {
       tasks: {
         data: [
           { id: 1, text: 'Task #1', start_date: '2020-01-17', duration: 3, progress: 0.6 },
-          { id: 2, text: 'Task #2', start_date: '2020-01-22', duration: 3, progress: 0.4 },
-          { id: 1615883726473, duration: 1, end_date: "2020-01-18", parent: "1", progress: 0, start_date: "2020-01-17", text: "New task"}
+          { id: 2, text: 'Task #2', start_date: '2020-01-23', duration: 3, progress: 0.4 },
+          { id: 1615883726473, type:gantt.config.types.milestone, duration: 1, parent: "1", progress: 0, start_date: "2020-01-17", text: "New task"}
         ],
         links: [
           {id: 1, source: 1, target: 2, type: '0'}
         ]
       },
+      unit: 'day',
       selectedTask: null,
       messages: []
     }
@@ -59,7 +64,6 @@ export default {
   },
   methods: {
     selectTask(task) {
-      console.log('ddd')
       this.selectedTask = task
     },
 
@@ -82,6 +86,10 @@ export default {
         message += ` ( source: ${link.source}, target: ${link.target} )`
       }
       this.addMessage(message)
+    },
+
+    changeUnit(unit) {
+      this.unit = unit
     }
   }
 }
