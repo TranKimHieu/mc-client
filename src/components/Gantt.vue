@@ -17,24 +17,50 @@ export default {
   },
 
   methods: {
+    $_customConfigGannt() {
+      gantt.templates.task_text = (start,end,task) => {
+        return "<b>Text:</b> "+task.text+",<b> Holders:</b> "+task.users;
+      }
+      gantt.plugins({
+        marker: true
+      });
+      gantt.config.xml_date = "%Y-%m-%d";
+    },
+
      $_initGanttEvents(){
       if (!gantt.$_eventsInitialized) {
         gantt.attachEvent('onTaskSelected', (id) => {
-          // eslint-disable-next-line no-undef
           let task = gantt.getTask(id);
 
           this.$emit('task-selected', task);
         });
 
         gantt.attachEvent('onTaskIdChange', (id, new_id) => {
-          // eslint-disable-next-line no-undef
-          if (gantt.getSelectedId() == new_id) {
-            // eslint-disable-next-line no-undef
+          if (gantt.getSelectedId() === new_id) {
             let task = gantt.getTask(new_id);
             this.$emit('task-selected', task);
           }
         });
-        // eslint-disable-next-line no-undef
+
+        gantt.attachEvent("onBeforeGanttRender", function(){
+          var range = gantt.getSubtaskDates();
+          var scaleUnit = gantt.getState().scale_unit;
+          if(range.start_date && range.end_date){
+            gantt.config.start_date = gantt.calculateEndDate(range.start_date, -4, scaleUnit);
+            gantt.config.end_date = gantt.calculateEndDate(range.end_date, 5, scaleUnit);
+          }
+        });
+
+        // eslint-disable-next-line no-unused-vars
+        gantt.attachEvent("onAfterTaskAdd", function(id, item){
+          gantt.render()
+        });
+
+        // eslint-disable-next-line no-unused-vars
+        gantt.attachEvent("onAfterTaskUpdate", function(id,item){
+          gantt.render()
+        });
+
         gantt.$_eventsInitialized = true;
       }
     },
@@ -49,11 +75,20 @@ export default {
       }
     },
 
-    $_configGannt() {
-      gantt.templates.task_text = (start,end,task) => {
-        return "<b>Text:</b> "+task.text+",<b> Holders:</b> "+task.users;
-      }
-    },
+    $_createMarker() {
+      var todayMarker = gantt.addMarker({
+        start_date: new Date(),
+        css: "today",
+        text: 'Now'
+      });
+      setInterval(function(){
+        var today = gantt.getMarker(todayMarker);
+        today.start_date = new Date();
+        today.text = 'Now'
+        gantt.updateMarker(todayMarker);
+        console.log('1')
+      }, 1000 * 60);
+    }
   },
 
   watch: {
@@ -75,19 +110,20 @@ export default {
   },
 
   mounted: function () {
-    this.$_configGannt();
+    this.$_customConfigGannt();
     this.$_initGanttEvents();
-    gantt.config.xml_date = "%Y-%m-%d";
-
+    this.$_createMarker()
     gantt.init(this.$refs.gantt);
-
     gantt.parse(this.$props.tasks);
-
     this.$_initDataProcessor();
+
   }
 }
 </script>
 
 <style>
 @import "~dhtmlx-gantt/codebase/dhtmlxgantt.css";
+</style>
+<style scoped>
+
 </style>

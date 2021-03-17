@@ -19,7 +19,7 @@
       <el-menu-item index="2-3">item three</el-menu-item>
     </el-submenu>
   </el-menu>
-  <router-view></router-view>
+  <router-view class="main-page"></router-view>
 </div>
 </template>
 
@@ -32,8 +32,9 @@ export default {
     };
   },
   methods: {
+    // eslint-disable-next-line no-unused-vars
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+
     },
     handleClickPage(name) {
       this.$router.push({name: name})
@@ -44,6 +45,9 @@ export default {
 
 <style scoped>
 #master {
-  height: 100vh;
+  height: calc(100% - 60px);
+}
+.main-page {
+  height: 100%;
 }
 </style>

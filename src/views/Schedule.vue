@@ -1,8 +1,7 @@
 <template>
   <div class="container">
-    <div class="right-container">
-      <button @click="changeUnit('month')">UnitMonth</button>
-      <button @click="changeUnit('day')">UnitDay</button>
+    <div class="right-container" :class="classToggle">
+      <div class="el-row"><span class="el-col-2 pointer" @click="toggleDetailTask()"><i class="el-icon-caret-right"></i></span></div>
       <div class="gantt-selected-info">
         <div v-if="selectedTask">
           <h2>{{ selectedTask.text }}</h2>
@@ -38,9 +37,9 @@ export default {
     return {
       tasks: {
         data: [
-          { id: 1, text: 'Task #1', start_date: '2020-01-17', duration: 3, progress: 0.6 },
-          { id: 2, text: 'Task #2', start_date: '2020-01-23', duration: 3, progress: 0.4 },
-          { id: 1615883726473, type:gantt.config.types.milestone, duration: 1, parent: "1", progress: 0, start_date: "2020-01-17", text: "New task"}
+          { id: 1, text: 'Task #1', start_date: '2021-03-11', duration: 3, progress: 0.6 },
+          { id: 2, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4 },
+          { id: 1615883726473, type:gantt.config.types.milestone, duration: 1, parent: "1", progress: 0, start_date: "2021-03-17", text: "New task"}
         ],
         links: [
           {id: 1, source: 1, target: 2, type: '0'}
@@ -48,7 +47,9 @@ export default {
       },
       unit: 'day',
       selectedTask: null,
-      messages: []
+      messages: [],
+      isOpenDetail: false,
+      classToggle: 'd-none',
     }
   },
   filters: {
@@ -65,6 +66,7 @@ export default {
   methods: {
     selectTask(task) {
       this.selectedTask = task
+      this.toggleDetailTask(true)
     },
 
     addMessage(message) {
@@ -78,6 +80,7 @@ export default {
       let text = (task && task.text ? ` (${task.text})` : '')
       let message = `Task ${mode}: ${id} ${text}`
       this.addMessage(message)
+      this.toggleDetailTask(true)
     },
 
     logLinkUpdate(id, mode, link) {
@@ -86,10 +89,26 @@ export default {
         message += ` ( source: ${link.source}, target: ${link.target} )`
       }
       this.addMessage(message)
+      this.toggleDetailTask(true)
     },
 
     changeUnit(unit) {
       this.unit = unit
+    },
+
+    toggleDetailTask(forceOpen = false){
+      if(!forceOpen){
+        this.classToggle = this.isOpenDetail ? 'd-none' : 'd-block'
+        this.isOpenDetail = !this.isOpenDetail
+      }else {
+        this.classToggle = 'd-block'
+        this.isOpenDetail = true
+      }
+    }
+  },
+  created() {
+    for ( let i = 8; i< 100; i++) {
+      this.tasks.data.push({ id: i, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4 })
     }
   }
 }
@@ -158,4 +177,10 @@ html, body {
   color: #d9d9d9;
 }
 
+</style>
+
+<style scoped>
+.right-container::v-deep {
+  height: auto !important;
+}
 </style>
