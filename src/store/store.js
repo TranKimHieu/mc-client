@@ -1,5 +1,6 @@
 import profile from './modules/profile';
 import auth from './modules/auth'
+import schedule from "@/store/modules/schedule";
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
@@ -7,6 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     modules: {
         profile,
-        auth
+        auth,
+        schedule
     }
 })

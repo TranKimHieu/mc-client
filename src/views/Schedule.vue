@@ -1,7 +1,8 @@
 <template>
   <div class="container">
-    <div class="right-container" :class="classToggle">
-      <div class="el-row"><span class="el-col-2 pointer" @click="toggleDetailTask()"><i class="el-icon-caret-right"></i></span></div>
+    <div class="right-container detail-task-right" :class="classToggle">
+      <div class="el-row"><span class="el-col-2 pointer" @click="toggleDetailTask()"><i class="el-icon-caret-right"></i></span>
+      </div>
       <div class="gantt-selected-info">
         <div v-if="selectedTask">
           <h2>{{ selectedTask.text }}</h2>
@@ -19,14 +20,13 @@
       </ul>
     </div>
 
-    <Gantt :unit="unit" class="left-container" :tasks="tasks" @task-updated="logTaskUpdate" @link-updated="logLinkUpdate"
-           @task-selected="selectTask"></Gantt>
+    <Gantt :unit="unit" class="left-container" :tasks="tasks"></Gantt>
   </div>
 </template>
 
 <script>
-  import 'dhtmlx-gantt'
-  import Gantt from '../components/Gantt';
+import 'dhtmlx-gantt'
+import Gantt from '../components/Gantt'
 
 export default {
   name: 'schedule',
@@ -37,9 +37,17 @@ export default {
     return {
       tasks: {
         data: [
-          { id: 1, text: 'Task #1', start_date: '2021-03-11', duration: 3, progress: 0.6 },
-          { id: 2, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4 },
-          { id: 1615883726473, type:gantt.config.types.milestone, duration: 1, parent: "1", progress: 0, start_date: "2021-03-17", text: "New task"}
+          {id: 1, text: 'Task #1', start_date: '2021-03-11', duration: 3, progress: 0.6},
+          {id: 2, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4},
+          {
+            id: 1615883726473,
+            type: gantt.config.types.milestone,
+            duration: 1,
+            parent: "1",
+            progress: 0,
+            start_date: "2021-03-17",
+            text: "New task"
+          }
         ],
         links: [
           {id: 1, source: 1, target: 2, type: '0'}
@@ -64,11 +72,6 @@ export default {
     }
   },
   methods: {
-    selectTask(task) {
-      this.selectedTask = task
-      this.toggleDetailTask(true)
-    },
-
     addMessage(message) {
       this.messages.unshift(message)
       if (this.messages.length > 40) {
@@ -76,40 +79,48 @@ export default {
       }
     },
 
-    logTaskUpdate(id, mode, task) {
-      let text = (task && task.text ? ` (${task.text})` : '')
-      let message = `Task ${mode}: ${id} ${text}`
-      this.addMessage(message)
-      this.toggleDetailTask(true)
+    changeUnit(unit) {
+      this.unit = unit
     },
 
-    logLinkUpdate(id, mode, link) {
+    toggleDetailTask(forceOpen = false) {
+      if (!forceOpen) {
+        this.classToggle = this.isOpenDetail ? 'd-none' : 'd-block'
+        this.isOpenDetail = !this.isOpenDetail
+      } else {
+        this.classToggle = 'd-block'
+        this.isOpenDetail = true
+      }
+    }
+  },
+  computed: {},
+  created() {
+    for (let i = 8; i < 100; i++) {
+      this.tasks.data.push({id: i, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4})
+    }
+    this.$bus.on('task-selected', task => {
+      this.selectedTask = task
+      this.toggleDetailTask(true)
+    })
+    this.$bus.on('task-updated', (id, mode, task) => {
+      let text = (task && task.text ? ` (${task.text})` : '')
+      let message = `Task ${mode}: ${id} ${text}`
+      this.selectedTask = {
+        ...task,
+        start_date: new Date(task.start_date),
+        end_date: new Date(task.end_date)
+      }
+      this.addMessage(message)
+      this.toggleDetailTask(true)
+    })
+    this.$bus.on('link-updated', (id, mode, link) => {
       let message = `Link ${mode}: ${id}`
       if (link) {
         message += ` ( source: ${link.source}, target: ${link.target} )`
       }
       this.addMessage(message)
       this.toggleDetailTask(true)
-    },
-
-    changeUnit(unit) {
-      this.unit = unit
-    },
-
-    toggleDetailTask(forceOpen = false){
-      if(!forceOpen){
-        this.classToggle = this.isOpenDetail ? 'd-none' : 'd-block'
-        this.isOpenDetail = !this.isOpenDetail
-      }else {
-        this.classToggle = 'd-block'
-        this.isOpenDetail = true
-      }
-    }
-  },
-  created() {
-    for ( let i = 8; i< 100; i++) {
-      this.tasks.data.push({ id: i, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4 })
-    }
+    })
   }
 }
 </script>
@@ -182,5 +193,10 @@ html, body {
 <style scoped>
 .right-container::v-deep {
   height: auto !important;
+}
+
+.detail-task-right {
+  max-height: 100%;
+  overflow: auto;
 }
 </style>

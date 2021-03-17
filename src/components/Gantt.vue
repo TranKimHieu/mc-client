@@ -31,14 +31,13 @@ export default {
       if (!gantt.$_eventsInitialized) {
         gantt.attachEvent('onTaskSelected', (id) => {
           let task = gantt.getTask(id);
-
-          this.$emit('task-selected', task);
+          this.$bus.emit('task-selected', task)
         });
 
         gantt.attachEvent('onTaskIdChange', (id, new_id) => {
           if (gantt.getSelectedId() === new_id) {
             let task = gantt.getTask(new_id);
-            this.$emit('task-selected', task);
+            this.$bus.emit('task-selected', task)
           }
         });
 
@@ -68,7 +67,7 @@ export default {
     $_initDataProcessor() {
       if (!gantt.$_dataProcessorInitialized) {
         gantt.createDataProcessor((entity, action, data, id) => {
-          this.$emit(`${entity}-updated`, id, action, data);
+          this.$bus.emit(`${entity}-updated`, id, action, data);
         });
 
         gantt.$_dataProcessorInitialized = true;

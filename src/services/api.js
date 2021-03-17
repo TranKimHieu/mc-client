@@ -1,8 +1,7 @@
-import {API} from "@/config";
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: API,
+    baseURL: process.env.API,
     timeout: 30000,
     headers: {
         'X-Requested-With': 'XMLHttpRequest',

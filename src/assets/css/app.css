@@ -10,3 +10,9 @@
 .d-block {
     display: block;
 }
+.mt-60px{
+    margin-top: 60px;
+}
+.float-right {
+    float: right !important;
+}
