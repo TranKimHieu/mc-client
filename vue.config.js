@@ -4,8 +4,8 @@ for (const k in envConfig) {
     process.env[k] = envConfig[k]
 }
 
-// module.exports = {
-    // publicPath: process.env.BASE_URL,
+module.exports = {
+    publicPath: process.env.VUE_APP_BASE_URL,
 //     pages: {
 //         index: {
 //             // entry for the page
@@ -29,4 +29,4 @@ for (const k in envConfig) {
 //         // Output filename is inferred to be `subpage.html`.
 //         // subpage: 'src/main.js'
 //     }
-// }
+}

@@ -6,6 +6,16 @@
 import 'dhtmlx-gantt'
 export default {
   name: 'Gantt',
+  data(){
+    return {
+      configLeft: {
+        pos: "left",
+        view: "grid",
+        scrollX:"scrollHor",
+        scrollY:"scrollVer"
+      },
+    }
+  },
   props: {
     tasks: {
       type: Object,
@@ -19,12 +29,37 @@ export default {
   methods: {
     $_customConfigGannt() {
       gantt.templates.task_text = (start,end,task) => {
-        return "<b>Text:</b> "+task.text+",<b> Holders:</b> "+task.users;
+        return "<b>Title:</b> "+task.text+",<b> Assignee:</b> "+task.users;
       }
       gantt.plugins({
         marker: true
       });
       gantt.config.xml_date = "%Y-%m-%d";
+
+      gantt.config.layout = {
+        css: "gantt_container",
+        rows:[
+          {
+            cols: [
+              this.configLeft,
+              {
+                pos: "center",
+                view: "timeline",
+                scrollX:"scrollHor",
+                scrollY:"scrollVer"
+              },
+              { resizer: true, width: 1 },
+              {
+                view: "scrollbar",
+                id:"scrollVer"
+              },
+            ]},
+          {
+            view: "scrollbar",
+            id:"scrollHor"
+          },
+        ]
+      }
     },
 
      $_initGanttEvents(){
@@ -115,8 +150,19 @@ export default {
     gantt.init(this.$refs.gantt);
     gantt.parse(this.$props.tasks);
     this.$_initDataProcessor();
+  },
 
-  }
+  // created() {
+  //   this.$bus.on('toggle-left-gantt', function () {
+  //     console.log(gantt.config.layout.rows[0].cols)
+  //     if(gantt.config.layout.rows[0].cols[0].pos === "left"){
+  //       gantt.config.layout.rows[0].cols[0] = {}
+  //     }else{
+  //       gantt.config.layout.rows[0].cols[0] = this.configLeft
+  //     }
+  //     gantt.init(this.$refs.gantt);
+  //   }.bind(this))
+  // }
 }
 </script>
 

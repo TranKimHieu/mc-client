@@ -16,3 +16,39 @@
 .float-right {
     float: right !important;
 }
+.block-center-parent{
+    position: relative !important;
+}
+.block-center-child{
+    position: absolute !important;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.text-left {
+    text-align: left;
+}
+.font-size-30 {
+    font-size: 30px !important;
+}
+.text-center {
+    text-align: center;
+}
+.w-100 {
+    width: 100%;
+}
+.mt-0 {
+    margin-top: 0 !important;
+}
+.mt-3 {
+    margin-top: 1.5rem;
+}
+.font-bold {
+    font-weight: bold;
+}
+.h-body-overview {
+    height: calc(100% - 60px - 37px) !important;
+}
+.right-line {
+    border-right: solid 1px black;
+}
