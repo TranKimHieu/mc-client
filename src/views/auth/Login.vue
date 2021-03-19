@@ -65,14 +65,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped type="text/css">
 .background-login {
   background: linear-gradient(#F8E3D0, #fadbbf, #F8E3D0)
 }
 
-.background-form-login {
-  border-radius: 15px;
-  background: linear-gradient(#F8E3D0, #fadbbf, #F8E3D0)
+.background-form-login button{
+    background-color: #eac9ab;
+    border: #eac9ab;
+  color: #2C3E51;
+  /*border-radius: 15px;*/
+  /*background: linear-gradient(#F8E3D0, #fadbbf, #F8E3D0)*/
 }
 
 .form-login ::v-deep .el-form-item__label {
