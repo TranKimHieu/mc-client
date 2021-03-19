@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="text-center h-100">
-      <el-col :span="24"><h1>Overview</h1></el-col>
+      <el-col :span="24"><h1>Project Name</h1></el-col>
       <el-col :span="24" class="h-body-overview">
         <div class="h-100">
           <el-col :span="8" class="h-100 block-center-parent right-line ">

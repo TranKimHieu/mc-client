@@ -52,3 +52,6 @@
 .right-line {
     border-right: solid 1px black;
 }
+.mb-2 {
+    margin-bottom: 1rem !important;
+}

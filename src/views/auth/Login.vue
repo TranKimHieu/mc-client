@@ -1,11 +1,12 @@
 <template>
   <el-row type="flex" class="h-100">
     <el-col class="block-center-parent background-login" :span="14">
+      <p class="text-center" style="font-size: 50px; font-weight: bold">CM System</p>
       <el-image class="block-center-child" :src="background"></el-image>
     </el-col>
     <el-col :span="10" class="block-center-parent">
       <el-col :span="16" class="block-center-child background-form-login form-login">
-        <el-col :span="16" :offset="4">
+        <el-col :span="16" :offset="4" class="mb-2">
           <h1 class="text-center">Login</h1>
           <el-form>
             <el-form-item label="Username">
@@ -70,7 +71,7 @@ export default {
 }
 
 .background-form-login {
-  border-radius: 20px;
+  border-radius: 15px;
   background: linear-gradient(#F8E3D0, #fadbbf, #F8E3D0)
 }
 

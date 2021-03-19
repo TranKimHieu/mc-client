@@ -5,7 +5,7 @@ for (const k in envConfig) {
 }
 
 module.exports = {
-    publicPath: process.env.VUE_APP_BASE_URL,
+    // publicPath: process.env.VUE_APP_BASE_URL,
 //     pages: {
 //         index: {
 //             // entry for the page

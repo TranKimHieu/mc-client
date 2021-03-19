@@ -29,7 +29,7 @@
       <el-submenu class="log float-right" index="9">
         <template slot="title">
           <span>
-            <i class="el-icon-bell font-size-30"><el-badge :value="100" :max="10" class="item"></el-badge></i>
+            <i class="el-icon-bell font-size-30"><el-badge :value="10" :max="10" class="item"></el-badge></i>
           </span>
         </template>
         <el-menu-item index="9-1">Task update: 2 (Task #2)</el-menu-item>
@@ -50,7 +50,7 @@ export default {
   name: "Master",
   data() {
     return {
-      activeIndex2: '2',
+      activeIndex2: '3',
       avatar: require('@/../public/avatar_mc.png'),
       uri: process.env.CLIENT_URL,
     };

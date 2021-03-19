@@ -48,7 +48,6 @@ export default {
                 scrollX:"scrollHor",
                 scrollY:"scrollVer"
               },
-              { resizer: true, width: 1 },
               {
                 view: "scrollbar",
                 id:"scrollVer"
