@@ -4,7 +4,18 @@
       <el-col :span="24" class="h-100">
         <div class="h-100">
           <el-col :span="8" class="h-100 right-line ">
-            <el-row class="text-left ml-2"><p>Status</p></el-row>
+            <el-row class="mt-2">
+              <el-col :span="12">
+                <div class="text-left ml-2">Status</div>
+              </el-col>
+              <el-col class="text-right pointer" :span="12">
+                <span>
+                  <i class="el-icon-pie-chart mr-2"></i>
+                  <span>Export PDF</span>
+                </span>
+              </el-col>
+            </el-row>
+
             <el-row >
               <div class="font-bold" style="font-size: 3rem; margin: 0;">2</div>
               <div style="font-size: x-large;">days remaining</div>

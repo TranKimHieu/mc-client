@@ -8,19 +8,11 @@
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b">
-      <el-menu-item index="1">
-        <el-image @click="handleClickPage('company')" :src="logo" style="width: 57px; color: aliceblue"></el-image>
-        <span>Project 1</span>
+      <el-menu-item index="1" @click="handleClickPage('company')">
+        <el-image :src="logo" style="width: 57px; color: aliceblue"></el-image>
+        <span v-if="isLogin()">Project 1</span>
+        <span v-else>CM System</span>
       </el-menu-item>
-<!--      <el-submenu index="1">-->
-<!--        <template slot="title">-->
-<!--          <span>-->
-
-<!--          </span>-->
-<!--        </template>-->
-<!--        <el-menu-item index="9-1">Project 1</el-menu-item>-->
-<!--        <el-menu-item index="9-2">Project 2</el-menu-item>-->
-<!--      </el-submenu>-->
 
       <el-menu-item v-if="isLogin()" @click="handleClickPage('overview')" index="2">Overview</el-menu-item>
       <el-menu-item v-if="isLogin()" @click="handleClickPage('schedule')" index="3">Task</el-menu-item>

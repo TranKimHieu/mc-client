@@ -67,3 +67,33 @@
 .ml-2 {
     margin-left: .5rem;
 }
+.h-2rem {
+    height: 2rem;
+}
+.d-flex {
+    display: flex !important;
+}
+.schedule-with-body {
+    height: calc(100% - 60px);
+    margin-top: 60px;
+    overflow-y: hidden;
+}
+.common-with-body {
+    height: calc(100% - 60px);
+    margin-top: 60px;
+}
+.font-size-xx-large {
+    font-size: xx-large;
+}
+.scroll-auto {
+    overflow: auto;
+}
+.mw-100 {
+    max-width: 100%;
+}
+.p-1 {
+    padding: .25rem;
+}
+.mt-2 {
+    margin-top: 1rem;
+}
