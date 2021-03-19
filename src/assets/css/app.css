@@ -64,3 +64,6 @@
 .min-h-200 {
     height: 200px;
 }
+.ml-2 {
+    margin-left: .5rem;
+}

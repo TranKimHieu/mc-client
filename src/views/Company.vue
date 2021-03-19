@@ -2,7 +2,7 @@
   <el-row class="p-4">
     <el-col :span="6" class="p-4 pointer">
       <el-card class="block-center-parent card-project" :body-style="{ padding: '0px', width: '100%'}">
-        <div class="block-center-child">
+        <div class="block-center-child" style="width: 160px;">
           <div><i class="el-icon-circle-plus-outline mr-2"></i>Add a new project</div>
         </div>
       </el-card>
