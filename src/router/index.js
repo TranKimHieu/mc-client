@@ -3,11 +3,12 @@ import Page401 from "@/views/error/Page401";
 import Page404 from "@/views/error/Page404";
 import {authCheck} from "@/helper/auth";
 import Login from "@/views/auth/Login";
-import Home from "@/components/Home";
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Schedule from "@/views/Schedule";
 import Master from "@/views/Master";
+import Company from "@/views/Company";
+import Overview from "@/views/Overview";
 
 Vue.use(VueRouter)
 
@@ -18,7 +19,8 @@ const routes = [
         children: [
             {path: '/', component: Schedule },
             { path: 'schedule', component: Schedule, name: 'schedule'},
-            { path: 'home', component: Home, name: 'home',},
+            { path: 'overview', component: Overview, name: 'overview',},
+            {path: 'company', component: Company, name: 'company'}
         ]
     },
     { path: '/401', component: Page401, meta: { requiresAuth: false } },

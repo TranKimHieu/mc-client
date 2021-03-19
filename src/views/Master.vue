@@ -2,14 +2,27 @@
   <div id="master">
     <el-menu
         :default-active="activeIndex2"
-        class="el-menu-demo"
+        class="el-menu-demo header"
         mode="horizontal"
         @select="handleSelect"
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b">
-      <el-menu-item @click="handleClickPage('home')" index="1">Project</el-menu-item>
-      <el-menu-item @click="handleClickPage('home')" index="2">Overview</el-menu-item>
+      <el-menu-item index="1">
+        <el-image @click="handleClickPage('company')" :src="logo" style="width: 57px; color: aliceblue"></el-image>
+        <span>Project 1</span>
+      </el-menu-item>
+<!--      <el-submenu index="1">-->
+<!--        <template slot="title">-->
+<!--          <span>-->
+
+<!--          </span>-->
+<!--        </template>-->
+<!--        <el-menu-item index="9-1">Project 1</el-menu-item>-->
+<!--        <el-menu-item index="9-2">Project 2</el-menu-item>-->
+<!--      </el-submenu>-->
+
+      <el-menu-item @click="handleClickPage('overview')" index="2">Overview</el-menu-item>
       <el-menu-item @click="handleClickPage('schedule')" index="3">Task</el-menu-item>
       <el-menu-item index="4">People</el-menu-item>
       <el-menu-item index="5">Image</el-menu-item>
@@ -45,7 +58,7 @@
 import {AUTH} from "@/store/action-types";
 import {removeToken} from "@/helper/auth";
 import {mapActions} from "vuex";
-
+import logo from '@/assets/logo_2.svg'
 export default {
   name: "Master",
   data() {
@@ -53,6 +66,7 @@ export default {
       activeIndex2: '3',
       avatar: require('@/../public/avatar_mc.png'),
       uri: process.env.CLIENT_URL,
+      logo: logo
     };
   },
   methods: {
@@ -88,10 +102,18 @@ export default {
 }
 
 .main-page {
-  height: calc(100% - 60px) !important;
+  height: 100%;
+  /*margin-top: 60px;*/
 }
 
 .log::v-deep .el-submenu__icon-arrow {
   display: none !important;
+}
+
+.header {
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+  z-index: 100;
 }
 </style>

@@ -23,4 +23,8 @@ export default {
   height: 100%;
   /*overflow-y: hidden;*/
 }
+body {
+  height: calc(100% - 60px);
+  margin-top: 60px;
+}
 </style>

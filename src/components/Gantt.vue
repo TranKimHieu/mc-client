@@ -59,6 +59,27 @@ export default {
           },
         ]
       }
+
+      gantt.config.lightbox.sections = [
+        {name: "type", type: "typeselect", map_to: "type"},
+        {name:"description", height:38, map_to:"text", type:"textarea", focus:true},
+        {name:"assignee", height:22, map_to:"assignee", type:"select", options: [
+            {key:1, label: "Hieutk1"},
+            {key:2, label: "Hieutk2"},
+            {key:3, label: "Hieutk3"}
+          ]},
+        {name:"time", height:72, type:"duration", map_to:"auto"}
+      ];
+      gantt.locale.labels.section_assignee = "Assignee";
+
+      gantt.attachEvent("onGanttReady", function(){
+        gantt.config.buttons_left = ["gantt_save_btn", "gantt_cancel_btn","complete_button"];
+        gantt.config.buttons_right = ["gantt_delete_btn"];
+        gantt.locale.labels["complete_button"] = "Complete";
+        gantt.locale.labels.gantt_save_btn = "New Label";
+        gantt.locale.labels.gantt_cancel_btn = "New Label";
+        gantt.locale.labels.gantt_delete_btn = "New Label";
+      });
     },
 
      $_initGanttEvents(){
@@ -92,6 +113,17 @@ export default {
         // eslint-disable-next-line no-unused-vars
         gantt.attachEvent("onAfterTaskUpdate", function(id,item){
           gantt.render()
+        });
+
+        gantt.attachEvent("onLightboxButton", function(button_id, node, e){
+          console.log(button_id)
+          if(button_id === "complete_button"){
+            console.log([node, e])
+            // var id = gantt.getState().lightbox;
+            // gantt.getTask(id).progress = 1;
+            // gantt.updateTask(id);
+            // gantt.hideLightbox();
+          }
         });
 
         gantt.$_eventsInitialized = true;

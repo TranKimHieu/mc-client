@@ -55,3 +55,15 @@
 .mb-2 {
     margin-bottom: 1rem !important;
 }
+.p-4 {
+    padding: 1.5rem;
+}
+.text-right {
+    text-align: right;
+}
+.mr-2 {
+    margin-right: .5rem;
+}
+.min-h-200 {
+    height: 200px;
+}
