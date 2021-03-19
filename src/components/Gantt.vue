@@ -6,6 +6,16 @@
 import 'dhtmlx-gantt'
 export default {
   name: 'Gantt',
+  data(){
+    return {
+      configLeft: {
+        pos: "left",
+        view: "grid",
+        scrollX:"scrollHor",
+        scrollY:"scrollVer"
+      },
+    }
+  },
   props: {
     tasks: {
       type: Object,
@@ -19,12 +29,57 @@ export default {
   methods: {
     $_customConfigGannt() {
       gantt.templates.task_text = (start,end,task) => {
-        return "<b>Text:</b> "+task.text+",<b> Holders:</b> "+task.users;
+        return "<b>Title:</b> "+task.text+",<b> Assignee:</b> "+task.users;
       }
       gantt.plugins({
         marker: true
       });
       gantt.config.xml_date = "%Y-%m-%d";
+
+      gantt.config.layout = {
+        css: "gantt_container",
+        rows:[
+          {
+            cols: [
+              this.configLeft,
+              {
+                pos: "center",
+                view: "timeline",
+                scrollX:"scrollHor",
+                scrollY:"scrollVer"
+              },
+              {
+                view: "scrollbar",
+                id:"scrollVer"
+              },
+            ]},
+          {
+            view: "scrollbar",
+            id:"scrollHor"
+          },
+        ]
+      }
+
+      gantt.config.lightbox.sections = [
+        {name: "type", type: "typeselect", map_to: "type"},
+        {name:"description", height:38, map_to:"text", type:"textarea", focus:true},
+        {name:"assignee", height:22, map_to:"assignee", type:"select", options: [
+            {key:1, label: "Hieutk1"},
+            {key:2, label: "Hieutk2"},
+            {key:3, label: "Hieutk3"}
+          ]},
+        {name:"time", height:72, type:"duration", map_to:"auto"}
+      ];
+      gantt.locale.labels.section_assignee = "Assignee";
+
+      gantt.attachEvent("onGanttReady", function(){
+        gantt.config.buttons_left = ["gantt_save_btn", "gantt_cancel_btn","complete_button"];
+        gantt.config.buttons_right = ["gantt_delete_btn"];
+        gantt.locale.labels["complete_button"] = "";
+        gantt.locale.labels.gantt_save_btn = "Save";
+        gantt.locale.labels.gantt_cancel_btn = "Cancel";
+        gantt.locale.labels.gantt_delete_btn = "Delete";
+      });
     },
 
      $_initGanttEvents(){
@@ -58,6 +113,17 @@ export default {
         // eslint-disable-next-line no-unused-vars
         gantt.attachEvent("onAfterTaskUpdate", function(id,item){
           gantt.render()
+        });
+
+        gantt.attachEvent("onLightboxButton", function(button_id, node, e){
+          console.log(button_id)
+          if(button_id === "complete_button"){
+            console.log([node, e])
+            // var id = gantt.getState().lightbox;
+            // gantt.getTask(id).progress = 1;
+            // gantt.updateTask(id);
+            // gantt.hideLightbox();
+          }
         });
 
         gantt.$_eventsInitialized = true;
@@ -115,8 +181,19 @@ export default {
     gantt.init(this.$refs.gantt);
     gantt.parse(this.$props.tasks);
     this.$_initDataProcessor();
+  },
 
-  }
+  // created() {
+  //   this.$bus.on('toggle-left-gantt', function () {
+  //     console.log(gantt.config.layout.rows[0].cols)
+  //     if(gantt.config.layout.rows[0].cols[0].pos === "left"){
+  //       gantt.config.layout.rows[0].cols[0] = {}
+  //     }else{
+  //       gantt.config.layout.rows[0].cols[0] = this.configLeft
+  //     }
+  //     gantt.init(this.$refs.gantt);
+  //   }.bind(this))
+  // }
 }
 </script>
 

@@ -6,6 +6,7 @@
       <div class="gantt-selected-info">
         <div v-if="selectedTask">
           <h2>{{ selectedTask.text }}</h2>
+          <span class="text-left"><label>Assignee</label><p>{{ selectedTask.users }}</p></span>
           <span><b>ID: </b>{{ selectedTask.id }}</span><br/>
           <span><b>Progress: </b>{{ selectedTask.progress|toPercent }}%</span><br/>
           <span><b>Start Date: </b>{{ selectedTask.start_date|niceDate }}</span><br/>
@@ -37,8 +38,8 @@ export default {
     return {
       tasks: {
         data: [
-          {id: 1, text: 'Task #1', start_date: '2021-03-11', duration: 3, progress: 0.6},
-          {id: 2, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4},
+          {id: 1, text: 'Task #1', start_date: '2021-03-11', duration: 3, progress: 0.6, users: 'hieutk'},
+          {id: 2, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4, users: 'hieutk'},
           {
             id: 1615883726473,
             type: gantt.config.types.milestone,
@@ -84,6 +85,7 @@ export default {
     },
 
     toggleDetailTask(forceOpen = false) {
+      this.$bus.emit('toggle-left-gantt')
       if (!forceOpen) {
         this.classToggle = this.isOpenDetail ? 'd-none' : 'd-block'
         this.isOpenDetail = !this.isOpenDetail
@@ -96,12 +98,14 @@ export default {
   computed: {},
   created() {
     for (let i = 8; i < 100; i++) {
-      this.tasks.data.push({id: i, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4})
+      this.tasks.data.push({id: i, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4, users: 'hieutk'})
     }
+
     this.$bus.on('task-selected', task => {
       this.selectedTask = task
       this.toggleDetailTask(true)
     })
+
     this.$bus.on('task-updated', (id, mode, task) => {
       let text = (task && task.text ? ` (${task.text})` : '')
       let message = `Task ${mode}: ${id} ${text}`
@@ -113,6 +117,7 @@ export default {
       this.addMessage(message)
       this.toggleDetailTask(true)
     })
+
     this.$bus.on('link-updated', (id, mode, link) => {
       let message = `Link ${mode}: ${id}`
       if (link) {
@@ -121,7 +126,7 @@ export default {
       this.addMessage(message)
       this.toggleDetailTask(true)
     })
-  }
+  },
 }
 </script>
 

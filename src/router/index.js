@@ -3,22 +3,24 @@ import Page401 from "@/views/error/Page401";
 import Page404 from "@/views/error/Page404";
 import {authCheck} from "@/helper/auth";
 import Login from "@/views/auth/Login";
-import Home from "@/components/Home";
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Schedule from "@/views/Schedule";
 import Master from "@/views/Master";
+import Company from "@/views/Company";
+import Overview from "@/views/Overview";
 
 Vue.use(VueRouter)
 
 const routes = [
     { path: '/', redirect: '/admin' },
-    { path: '/login', component: Login , name: 'login', meta: { requiresAuth: false } },
-    {path: '/admin', component: Master, name: 'master', meta: { requiresAuth: true },
+    {path: '/admin', component: Master, name: 'master',
         children: [
             {path: '/', component: Schedule },
-            { path: 'schedule', component: Schedule, name: 'schedule'},
-            { path: 'home', component: Home, name: 'home',},
+            { path: 'schedule', component: Schedule, name: 'schedule', meta: { requiresAuth: true }},
+            { path: 'overview', component: Overview, name: 'overview', meta: { requiresAuth: true }},
+            {path: 'company', component: Company, name: 'company', meta: { requiresAuth: true }},
+            { path: 'login', component: Login , name: 'login', meta: { requiresAuth: false } },
         ]
     },
     { path: '/401', component: Page401, meta: { requiresAuth: false } },
