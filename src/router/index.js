@@ -14,13 +14,13 @@ Vue.use(VueRouter)
 
 const routes = [
     { path: '/', redirect: '/admin' },
-    { path: '/login', component: Login , name: 'login', meta: { requiresAuth: false } },
-    {path: '/admin', component: Master, name: 'master', meta: { requiresAuth: true },
+    {path: '/admin', component: Master, name: 'master',
         children: [
             {path: '/', component: Schedule },
-            { path: 'schedule', component: Schedule, name: 'schedule'},
-            { path: 'overview', component: Overview, name: 'overview',},
-            {path: 'company', component: Company, name: 'company'}
+            { path: 'schedule', component: Schedule, name: 'schedule', meta: { requiresAuth: true }},
+            { path: 'overview', component: Overview, name: 'overview', meta: { requiresAuth: true }},
+            {path: 'company', component: Company, name: 'company', meta: { requiresAuth: true }},
+            { path: 'login', component: Login , name: 'login', meta: { requiresAuth: false } },
         ]
     },
     { path: '/401', component: Page401, meta: { requiresAuth: false } },

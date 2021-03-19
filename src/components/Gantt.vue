@@ -75,10 +75,10 @@ export default {
       gantt.attachEvent("onGanttReady", function(){
         gantt.config.buttons_left = ["gantt_save_btn", "gantt_cancel_btn","complete_button"];
         gantt.config.buttons_right = ["gantt_delete_btn"];
-        gantt.locale.labels["complete_button"] = "Complete";
-        gantt.locale.labels.gantt_save_btn = "New Label";
-        gantt.locale.labels.gantt_cancel_btn = "New Label";
-        gantt.locale.labels.gantt_delete_btn = "New Label";
+        gantt.locale.labels["complete_button"] = "";
+        gantt.locale.labels.gantt_save_btn = "Save";
+        gantt.locale.labels.gantt_cancel_btn = "Cancel";
+        gantt.locale.labels.gantt_delete_btn = "Delete";
       });
     },
 

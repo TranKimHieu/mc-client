@@ -46,9 +46,6 @@
 .font-bold {
     font-weight: bold;
 }
-.h-body-overview {
-    height: calc(100% - 60px - 37px) !important;
-}
 .right-line {
     border-right: solid 1px black;
 }

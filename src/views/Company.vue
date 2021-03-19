@@ -1,14 +1,14 @@
 <template>
   <el-row class="p-4">
     <el-col :span="6" class="p-4 pointer">
-      <el-card class="block-center-parent min-h-200" :body-style="{ padding: '0px', width: '100%'}">
+      <el-card class="block-center-parent card-project" :body-style="{ padding: '0px', width: '100%'}">
         <div class="block-center-child">
           <div><i class="el-icon-circle-plus-outline mr-2"></i>Add a new project</div>
         </div>
       </el-card>
     </el-col>
     <el-col :span="6" v-for="(o) in 8" :key="o" class="p-4 pointer">
-      <el-card header="Project name 1" :body-style="{ padding: '0px', width: '100%'}">
+      <el-card class="card-project" header="Project name 1" :body-style="{ padding: '0px', width: '100%'}">
         <el-image :src="imageProject" class="image"></el-image>
         <div style="padding: 14px;">
           <span>hieutk@gmail.com</span>
@@ -38,5 +38,8 @@ name: "Project",
 </script>
 
 <style scoped>
-
+.card-project {
+    max-width: 300px !important;
+    height: 400px !important;
+  }
 </style>

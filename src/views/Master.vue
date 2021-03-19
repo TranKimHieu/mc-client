@@ -22,24 +22,24 @@
 <!--        <el-menu-item index="9-2">Project 2</el-menu-item>-->
 <!--      </el-submenu>-->
 
-      <el-menu-item @click="handleClickPage('overview')" index="2">Overview</el-menu-item>
-      <el-menu-item @click="handleClickPage('schedule')" index="3">Task</el-menu-item>
-      <el-menu-item index="4">People</el-menu-item>
-      <el-menu-item index="5">Image</el-menu-item>
+      <el-menu-item v-if="isLogin()" @click="handleClickPage('overview')" index="2">Overview</el-menu-item>
+      <el-menu-item v-if="isLogin()" @click="handleClickPage('schedule')" index="3">Task</el-menu-item>
+      <el-menu-item v-if="isLogin()" index="4">People</el-menu-item>
+      <el-menu-item v-if="isLogin()" index="5">Image</el-menu-item>
 
-      <el-menu-item @click="logout" class="float-right" index="6">
+      <el-menu-item v-if="isLogin()" @click="logout" class="float-right" index="6">
         <span><i class="el-icon-switch-button font-size-30"></i></span>
       </el-menu-item>
 
-      <el-menu-item class="float-right" index="7">
+      <el-menu-item v-if="isLogin()" class="float-right" index="7">
         <span><i class="el-icon-setting font-size-30"></i></span>
       </el-menu-item>
 
-      <el-menu-item class="float-right" index="8">
+      <el-menu-item v-if="isLogin()" class="float-right" index="8">
         <span><i class="el-icon-user font-size-30"></i></span>
       </el-menu-item>
 
-      <el-submenu class="log float-right" index="9">
+      <el-submenu v-if="isLogin()" class="log float-right" index="9">
         <template slot="title">
           <span>
             <i class="el-icon-bell font-size-30"><el-badge :value="10" :max="10" class="item"></el-badge></i>
@@ -59,6 +59,8 @@ import {AUTH} from "@/store/action-types";
 import {removeToken} from "@/helper/auth";
 import {mapActions} from "vuex";
 import logo from '@/assets/logo_2.svg'
+import {authCheck} from "@/helper/auth";
+
 export default {
   name: "Master",
   data() {
@@ -85,6 +87,9 @@ export default {
       if (name !== this.$router.history.current.name) {
         this.$router.push({name: name})
       }
+    },
+    isLogin(){
+      return authCheck()
     },
     ...mapActions([
       AUTH.LOGOUT
