@@ -23,7 +23,8 @@ export default {
         return {data: [], links: []}
       }
     },
-    unit: null
+    unit: null,
+    removeLeft: null
   },
 
   methods: {
@@ -171,6 +172,16 @@ export default {
         {unit: unit, step: 1, format: format},
       ];
       gantt.render();
+    },
+    removeLeft: function () {
+      // this.$bus.on('toggle-left-gantt', function () {
+        if(gantt.config.layout.rows[0].cols[0].pos === "left"){
+          gantt.config.layout.rows[0].cols.shift()
+        }else{
+          gantt.config.layout.rows[0].cols.unshift(this.configLeft)
+        }
+        gantt.init(this.$refs.gantt);
+      // }.bind(this))
     }
   },
 
@@ -181,19 +192,8 @@ export default {
     gantt.init(this.$refs.gantt);
     gantt.parse(this.$props.tasks);
     this.$_initDataProcessor();
-  },
 
-  // created() {
-  //   this.$bus.on('toggle-left-gantt', function () {
-  //     console.log(gantt.config.layout.rows[0].cols)
-  //     if(gantt.config.layout.rows[0].cols[0].pos === "left"){
-  //       gantt.config.layout.rows[0].cols[0] = {}
-  //     }else{
-  //       gantt.config.layout.rows[0].cols[0] = this.configLeft
-  //     }
-  //     gantt.init(this.$refs.gantt);
-  //   }.bind(this))
-  // }
+  },
 }
 </script>
 

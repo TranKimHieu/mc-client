@@ -17,15 +17,15 @@
             </el-row>
 
             <el-row >
-              <div class="font-bold" style="font-size: 3rem; margin: 0;">2</div>
+              <div class="font-bold" style="font-size: 2rem; margin: 0;">2</div>
               <div style="font-size: x-large;">days remaining</div>
-              <div class="mt-3 font-bold" style="font-size: 2rem;">18 Mar 2021</div>
+              <div class="mt-3 font-bold" style="font-size: 1rem;">18 Mar 2021</div>
               <div>Scheduled end date</div>
-              <div style="margin-top: 1rem; font-size: 1.5rem">30% completed</div>
-              <div style="font-size: 1.5rem">60% In progress</div>
-              <div style="font-size: 1.5rem">10% Delayed</div>
+              <div style="margin-top: 1rem; font-size: 1rem">30% completed</div>
+              <div style="font-size: 1rem">60% In progress</div>
+              <div style="font-size: 1rem">10% Delayed</div>
             </el-row>
-            <div style="height: calc(100% - 312px)" class="block-center-parent">
+            <div style="height: calc(100% - 312px); margin-top: 2rem" class="block-center-parent">
               <div class="block-center-child">
                 <vc-donut background="white" foreground="grey"
                           :size="200" unit="px" :thickness="30"
