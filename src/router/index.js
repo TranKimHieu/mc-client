@@ -9,6 +9,7 @@ import Schedule from "@/views/Schedule";
 import Master from "@/views/Master";
 import Company from "@/views/Company";
 import Overview from "@/views/Overview";
+import Member from "@/views/People";
 
 Vue.use(VueRouter)
 
@@ -16,11 +17,12 @@ const routes = [
     { path: '/', redirect: '/admin' },
     {path: '/admin', component: Master, name: 'master',
         children: [
-            {path: '/', component: Schedule },
-            { path: 'schedule', component: Schedule, name: 'schedule', meta: { requiresAuth: true }},
-            { path: 'overview', component: Overview, name: 'overview', meta: { requiresAuth: true }},
-            {path: 'company', component: Company, name: 'company', meta: { requiresAuth: true }},
+            { path: '/', component: Schedule },
+            { path: 'schedule', component: Schedule, name: 'schedule', meta: { requiresAuth: true } },
+            { path: 'overview', component: Overview, name: 'overview', meta: { requiresAuth: true } },
+            { path: 'company', component: Company, name: 'company', meta: { requiresAuth: true } },
             { path: 'login', component: Login , name: 'login', meta: { requiresAuth: false } },
+            { path: 'Member', component: Member, name: 'member', meta: { requiresAuth: true } }
         ]
     },
     { path: '/401', component: Page401, meta: { requiresAuth: false } },

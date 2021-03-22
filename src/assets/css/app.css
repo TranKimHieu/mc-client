@@ -68,7 +68,7 @@
     margin-left: .5rem;
 }
 .h-2rem {
-    height: 2rem;
+    height: 2rem !important;
 }
 .d-flex {
     display: flex !important;
@@ -96,4 +96,10 @@
 }
 .mt-2 {
     margin-top: 1rem;
+}
+.color-y {
+    color: #DE9260;
+}
+.bg-tool-gray {
+    background-color: #E6E7E8 !important;
 }
