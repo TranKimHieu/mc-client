@@ -103,3 +103,25 @@
 .bg-tool-gray {
     background-color: #E6E7E8 !important;
 }
+.border-none {
+    border: none !important;
+}
+.mt-2rem {
+    margin-top: 2rem !important;
+}
+.fixed {
+    position: fixed;
+}
+.z-100 {
+    z-index: 100;
+    top: 60px;
+}
+.bg-images-layout {
+    background-color: #333 !important;
+}
+.item-center {
+    align-items: center !important;
+}
+.mt-tool-navbar {
+    margin-top: calc(2rem + 60px) !important;
+}

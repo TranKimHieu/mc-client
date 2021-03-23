@@ -1,85 +1,203 @@
 <template>
-  <el-row>
-    <div style="height: 50%" class="text-center block-center-parent">
-      <lingallery class="block-center-child" :width="width" :height="height" :items="items"/>
+    <div class="tile is-ancestor h-100 mt-tool-navbar">
+      <div class="tile is-10 is-vertical is-parent h-100 bg-images ">
+        <div class="viewer-wrapper">
+          <viewer :options="options" :images="images"
+                  @inited="inited"
+                  class="viewer" ref="viewer"
+          >
+            <template slot-scope="scope">
+              <div class="images">
+                <div class="image-wrapper" v-for="{source, thumbnail} in scope.images" :key="source">
+                  <img class="image"
+                       :src="thumbnail" :data-source="source" :alt="source.split('?image=').pop()"
+                  >
+                </div>
+              </div>
+            </template>
+          </viewer>
+        </div>
+      </div>
     </div>
-    <el-row class="mt-60px">
-      <el-col :key="o" v-for="(o) in 30" :span="3">
-        <span class="pointer">
-          <i v-if="o!==1" class="el-icon-folder font-size-30">
-          </i>
-          <i v-else class="el-icon-folder-opened font-size-30 color-y">
-          </i>
-          Task 123
-        </span>
-      </el-col>
-    </el-row>
-  </el-row>
 </template>
 
 <script>
-import construction from '@/assets/image_demo_project.png';
-import testImg from '@/assets/test_img.jpg'
-import testImg64 from '@/assets/test_img_64.jpg'
 import test1 from '@/assets/test/test1.jpeg'
 import test2 from '@/assets/test/test2.jpeg'
 import test3 from '@/assets/test/test3.jpeg'
 import test4 from '@/assets/test/test4.jpeg'
 import test5 from '@/assets/test/test5.jpeg'
 import test6 from '@/assets/test/test6.jpeg'
-
+const sourceImages = []
+for (let i = 0; i < 20; i++) {
+  sourceImages.push({
+    thumbnail: test1,
+    source: test1
+  })
+  sourceImages.push({
+    thumbnail: test2,
+    source: test2
+  })
+  sourceImages.push({
+    thumbnail: test3,
+    source: test3
+  })
+  sourceImages.push({
+    thumbnail: test4,
+    source: test4
+  })
+  sourceImages.push({
+    thumbnail: test5,
+    source: test5
+  })
+  sourceImages.push({
+    thumbnail: test6,
+    source: test6
+  })
+}
 export default {
-  name: "FolderImage",
-  data() {
+  name: 'folderImage',
+  data () {
     return {
-      construction,
-      width: '500',
-      height: '100%',
-      items: [
-        {
-          src: testImg,
-          thumbnail: testImg64,
-          caption: 'Some Caption'
-        },
-        {
-          src: construction,
-          thumbnail: construction,
-          caption: 'Some Caption'
-        },
-        {
-          src: test1,
-          thumbnail: test1,
-          caption: 'Some Caption'
-        },        {
-          src: test2,
-          thumbnail: test2,
-          caption: 'Some Caption'
-        },        {
-          src: test3,
-          thumbnail: test3,
-          caption: 'Some Caption'
-        },
-        {
-          src: test4,
-          thumbnail: test4,
-          caption: 'Some Caption'
-        },
-        {
-          src: test5,
-          thumbnail: test5,
-          caption: 'Some Caption'
-        },
-        {
-          src: test6,
-          thumbnail: test6,
-          caption: 'Some Caption'
-        },
-      ]
-    };
+      form: {
+        view: 2,
+        zoom: -0.1,
+        zoomTo: 0.8,
+        rotate: 90,
+        rotateTo: 180,
+        scaleX: 1,
+        scaleY: 1
+      },
+      toggleOptions: [
+        'button',
+        'navbar',
+        'title',
+        'toolbar',
+        'tooltip',
+        'movable',
+        'zoomable',
+        'rotatable',
+        'scalable',
+        'transition',
+        'fullscreen',
+        'keyboard'
+      ],
+      options: {
+        inline: false,
+        button: true,
+        navbar: true,
+        title: true,
+        toolbar: true,
+        tooltip: true,
+        movable: true,
+        zoomable: true,
+        rotatable: true,
+        scalable: true,
+        transition: true,
+        fullscreen: true,
+        keyboard: true,
+        url: 'data-source'
+      },
+      images: [...sourceImages].splice(0, 100)
+    }
+  },
+  computed: {
+  },
+  methods: {
+    inited (viewer) {
+      this.$viewer = viewer
+    },
+    view () {
+      if (this.form.view >= 0 && this.form.view < this.images.length) {
+        this.$viewer.view(this.form.view)
+      }
+    },
+    zoom (value) {
+      this.$viewer.zoom(value || this.form.zoom)
+    },
+    zoomTo () {
+      this.$viewer.zoomTo(this.form.zoomTo)
+    },
+    rotate (value) {
+      this.$viewer.rotate(value || this.form.rotate)
+    },
+    rotateTo () {
+      this.$viewer.rotateTo(this.form.rotateTo)
+    },
+    scaleX (value) {
+      if (value) {
+        this.$viewer.scaleX(value)
+      } else {
+        this.form.scaleX = -this.form.scaleX
+        this.$viewer.scaleX(this.form.scaleX)
+      }
+    },
+    scaleY (value) {
+      if (value) {
+        this.$viewer.scaleY(value)
+      } else {
+        this.form.scaleY = -this.form.scaleY
+        this.$viewer.scaleY(this.form.scaleY)
+      }
+    },
+    full () {
+      this.$viewer.full()
+    },
+    tooltip () {
+      this.$viewer.tooltip()
+    },
   }
 }
 </script>
 
 <style scoped>
+.viewer-wrapper {
+  position: relative;
+  background: #333;
+}
+.methods {
+  margin-bottom: 1em;
+  flex-wrap: wrap;
+}
+.methods > * {
+  margin-right: 0.75rem;
 
+}
+.options-panel .panel-block {
+    padding: 0;
+
+}
+.options-panel .checkbox {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.5em 0.75em;
+}
+.viewer {
+  height: 100%;
+}
+.viewer .images {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow: auto;
+    /*padding: 5px;*/
+}
+.images .image-wrapper {
+  display: inline-block;
+  /*width: calc(33% - 20px);*/
+  margin: 5px 5px 0 5px;
+  width: 20%;
+}
+.image-wrapper .image {
+  width: 100%;
+  cursor: pointer;
+  display: inline-block;
+}
+.bg-images {
+  background-color: #333 !important;
+}
 </style>

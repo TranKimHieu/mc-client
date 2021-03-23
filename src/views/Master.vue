@@ -2,7 +2,7 @@
   <div id="master">
     <el-menu
         :default-active="activeIndex2"
-        class="el-menu-demo header"
+        class="el-menu-demo header border-none"
         mode="horizontal"
         @select="handleSelect"
         background-color="#545c64"

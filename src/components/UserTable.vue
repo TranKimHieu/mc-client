@@ -15,27 +15,27 @@
         <el-table-column
             prop="name"
             label="Name"
-            width="200">
+            width="300">
         </el-table-column>
         <el-table-column
             prop="state"
             label="State"
-            width="200">
+            width="300">
         </el-table-column>
         <el-table-column
             prop="city"
             label="City"
-            width="200">
+            width="300">
         </el-table-column>
         <el-table-column
             prop="address"
             label="Address"
-            width="200">
+            width="300">
         </el-table-column>
         <el-table-column
             prop="zip"
             label="Zip"
-            width="200">
+            width="300">
         </el-table-column>
         <el-table-column
             fixed="right"

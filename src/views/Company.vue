@@ -9,7 +9,7 @@
     </el-col>
     <el-col :span="6" v-for="(o) in 8" :key="o" class="p-4 pointer">
       <el-card class="card-project" header="Project name 1" :body-style="{ padding: '0px', width: '100%'}">
-        <el-image :src="imageProject" class="image"></el-image>
+        <el-image @click="handleClickPage('overview')" :src="imageProject" class="image"></el-image>
         <div style="padding: 14px;">
           <span>hieutk@gmail.com</span>
           <div class="bottom clearfix el-row">
@@ -26,12 +26,18 @@
 
 <script>
 import imageProject from '@/assets/image_demo_project.png'
+
 export default {
-name: "Project",
+  name: "Project",
   data() {
     return {
       currentDate: new Date(),
       imageProject: imageProject,
+    }
+  },
+  methods: {
+    handleClickPage(page){
+      this.$router.push({name: page})
     }
   }
 }
@@ -39,7 +45,7 @@ name: "Project",
 
 <style scoped>
 .card-project {
-    max-width: 300px !important;
-    height: 400px !important;
-  }
+  max-width: 300px !important;
+  height: 400px !important;
+}
 </style>
