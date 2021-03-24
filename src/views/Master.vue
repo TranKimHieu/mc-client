@@ -2,7 +2,7 @@
   <div id="master">
     <el-menu
         :default-active="activeIndex2"
-        class="el-menu-demo header"
+        class="el-menu-demo header border-none"
         mode="horizontal"
         @select="handleSelect"
         background-color="#545c64"
@@ -16,8 +16,8 @@
 
       <el-menu-item v-if="isLogin()" @click="handleClickPage('overview')" index="2">Overview</el-menu-item>
       <el-menu-item v-if="isLogin()" @click="handleClickPage('schedule')" index="3">Task</el-menu-item>
-      <el-menu-item v-if="isLogin()" index="4">People</el-menu-item>
-      <el-menu-item v-if="isLogin()" index="5">Image</el-menu-item>
+      <el-menu-item v-if="isLogin()" @click="handleClickPage('member')" index="4">People</el-menu-item>
+      <el-menu-item v-if="isLogin()" @click="handleClickPage('image')" index="5">Image</el-menu-item>
 
       <el-menu-item v-if="isLogin()" @click="logout" class="float-right" index="6">
         <span><i class="el-icon-switch-button font-size-30"></i></span>

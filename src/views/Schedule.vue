@@ -1,16 +1,16 @@
 <template>
   <div class="container">
     <div class="h-2rem filter-header d-flex">
-      <div class="el-col-2 font-size-xx-large pointer">
-        <span><i class="el-icon-caret-left"></i></span>
+      <div @click="removeLeftColumn" class="el-col-2 font-size-xx-large pointer">
+        <span><i class="el-icon-s-fold"></i></span>
       </div>
       <div class="el-col-2 font-size-xx-large pointer">
         <span><i class="el-icon-download"></i></span>
       </div>
-      <div class="el-col-2 font-size-xx-large pointer">
+      <div @click="changeUnit('day')" class="el-col-2 font-size-xx-large pointer">
         <span><i class="el-icon-zoom-in"></i></span>
       </div>
-      <div class="el-col-2 font-size-xx-large pointer">
+      <div @click="changeUnit('month')" class="el-col-2 font-size-xx-large pointer">
         <span><i class="el-icon-zoom-out"></i></span>
       </div>
       <div class="el-col-4 el-col-offset-14">
@@ -64,7 +64,7 @@
       </ul>
     </div>
 
-    <Gantt :unit="unit" class="left-container" :tasks="tasks"></Gantt>
+    <Gantt :removeLeft="removeLeft" :unit="unit" class="left-container" :tasks="tasks"></Gantt>
   </div>
 </template>
 
@@ -92,13 +92,24 @@ export default {
             progress: 0,
             start_date: "2021-03-17",
             text: "New task"
+          },
+          {
+            id: 16158837,
+            type: gantt.config.types.milestone,
+            duration: 1,
+            progress: 0,
+            start_date: "2021-03-19",
+            text: 'Mileston',
+            users: 'hieutk1'
           }
         ],
         links: [
-          {id: 1, source: 1, target: 2, type: '0'}
+          {id: 1, source: 1, target: 2, type: '0'},
+          {id: 2, source: 1, target: 16158837, type: '0'}
         ]
       },
       unit: 'day',
+      removeLeft: false,
       selectedTask: null,
       messages: [],
       isOpenDetail: false,
@@ -132,8 +143,12 @@ export default {
     },
 
     toggleDetailTask(forceOpen = false) {
-      this.$bus.emit('toggle-left-gantt')
       this.isOpenDetail = !!forceOpen
+    },
+
+    removeLeftColumn()
+    {
+      this.removeLeft = !this.removeLeft
     }
   },
   computed: {},
@@ -199,7 +214,7 @@ html, body {
 .right-container {
   border-right: 1px solid #cecece;
   float: right;
-  height: 100%;
+  height: calc(100% - 2rem);
   width: 340px;
   box-shadow: 0 0 1px 1px #aaa;
   position: relative;
@@ -248,7 +263,7 @@ html, body {
   height: auto !important;
 }
 .detail-task-right {
-  max-height: 100%;
+  max-height: calc(100% - 2rem);
   overflow: auto;
 }
 .filter-header {
