@@ -1,23 +1,24 @@
 <template>
   <div>
-    <div :class="`h-2rem fixed z-100 w-100 d-flex 2rem item-center ${bgBreadcrumb}`">
-      <el-breadcrumb class="ml-2" separator-class="el-icon-arrow-right ">
-        <el-breadcrumb-item :to="{name: 'overview'}">homepage</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{name: 'overview'}">promotion management</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{name: 'overview'}">promotion list</el-breadcrumb-item>
-        <el-breadcrumb-item @click="changeIsMyCollection(true)">image</el-breadcrumb-item>
-      </el-breadcrumb>
+    <div class="h-2rem fixed z-100 w-100 d-flex 2rem item-center" :class="bgBreadcrumb">
+      <p class="ml-2">
+        <span class="pointer el-breadcrumb-hover" :class="animationText" @click="gotoFolder(1)">homepage</span>
+        <span class="pointer el-icon-arrow-right el-breadcrumb-hover" @click="gotoFolder(1)">promotion management</span>
+        <span class="pointer el-icon-arrow-right el-breadcrumb-hover" @click="gotoFolder(1)">promotion list</span>
+        <span class="pointer el-icon-arrow-right el-breadcrumb-hover" @click="gotoFolder(0)">image</span>
+      </p>
     </div>
 
-    <el-row  v-if="!isInMyCollection">
-      <div class="el-col-2">
-        <img :src="iconImage">
+    <el-row  class="mt-tool-navbar" v-if="!isInMyCollection">
+      <div class="el-col-2 mt-2">
+        <img @click="changeIsMyCollection(true)" class="w-100 max-h-100 pointer hover-shadow" :src="iconImage">
       </div>
-      <div class="el-col-2" :key="o" v-for="(o) of 4">
-        <img :src="iconFolder">
+      <div class="el-col-2 mt-2" :key="o" v-for="(o) of 30">
+        <img @click="changeIsMyCollection(false)" class="w-100 max-h-100 pointer hover-shadow" :src="iconFolder">
+        <div class="text-center"><span>Task #1</span></div>
       </div>
     </el-row>
-    <FolderImage v-if="isInMyCollection"></FolderImage>
+    <FolderImage class="mt-tool-navbar" v-if="isInMyCollection"></FolderImage>
   </div>
 </template>
 
@@ -31,9 +32,10 @@ export default {
     return {
       iconImage,
       iconFolder,
-      isInMyCollection : true,
+      isInMyCollection : false,
       folderList: [1,2,3,4,5,6,7,8],
-      bgBreadcrumb : 'bg-images-layout'
+      bgBreadcrumb : 'bg-tool-gray',
+      animationText: null
     }
   },
   components: {
@@ -41,11 +43,22 @@ export default {
   },
   methods: {
     changeBgBreadcrumb(){
-      this.bgBreadcrumb = this.isInMyCollection ? 'bg-images-layout' : 'bg-tool-gray';
+      this.bgBreadcrumb = this.isInMyCollection ? 'animation-from-white' : 'bg-tool-gray';
+      // this.animationText = this.isInMyCollection ? ''
     },
     changeIsMyCollection(isMyCollection){
-      console.log('aaa')
       this.isInMyCollection = isMyCollection
+    },
+    gotoFolder(folder){
+        this.changeIsMyCollection(folder === 0)
+    }
+  },
+  created() {
+    this.changeBgBreadcrumb()
+  },
+  watch: {
+    isInMyCollection: function () {
+      this.changeBgBreadcrumb()
     }
   }
 }
@@ -55,7 +68,13 @@ export default {
 span ::v-deep .el-breadcrumb__inner {
   color: #aaaaaa !important;
 }
-span ::v-deep .el-breadcrumb__inner:hover {
-  color: burlywood !important;
+@keyframes background_to_white {
+  0%   {background-color: white;color: #333333;}
+}
+.animation-from-white {
+  background-color: #333;
+  animation-name: background_to_white;
+  animation-duration: 4s;
+  color: lightyellow;
 }
 </style>
