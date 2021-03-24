@@ -151,9 +151,14 @@ export default {
 </script>
 
 <style scoped>
+@keyframes background {
+  0%   {background-color: white;}
+}
 .viewer-wrapper {
   position: relative;
   background: #333;
+  animation-name: background;
+  animation-duration: 4s;
 }
 .methods {
   margin-bottom: 1em;
