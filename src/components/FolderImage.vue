@@ -1,5 +1,5 @@
 <template>
-    <div class="tile is-ancestor h-100 mt-tool-navbar">
+    <div class="tile is-ancestor h-100">
       <div class="tile is-10 is-vertical is-parent h-100 bg-images ">
         <div class="viewer-wrapper">
           <viewer :options="options" :images="images"
