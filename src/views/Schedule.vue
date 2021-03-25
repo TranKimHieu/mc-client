@@ -44,6 +44,10 @@
         </div>
 
         <el-form class="mt-3">
+          <el-form-item>
+            <el-button type="warning">Report request</el-button>
+            <div>Latest: 10:22:40 20/03/2021</div>
+          </el-form-item>
           <el-upload
               class="avatar-uploader"
               action="https://jsonplaceholder.typicode.com/posts/"

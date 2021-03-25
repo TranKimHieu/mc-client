@@ -98,7 +98,7 @@
     margin-top: 1rem;
 }
 .color-y {
-    color: #DE9260;
+    color: #DE9260 !important;
 }
 .bg-tool-gray {
     background-color: #E6E7E8 !important;
@@ -132,5 +132,11 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .el-breadcrumb-hover:hover {
+    color: burlywood !important;
+}
+.item-space-between {
+    justify-content: space-between;
+}
+.color-burlywood {
     color: burlywood !important;
 }

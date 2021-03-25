@@ -37,11 +37,24 @@
             <i class="el-icon-bell font-size-30"><el-badge :value="10" :max="10" class="item"></el-badge></i>
           </span>
         </template>
-        <el-menu-item index="9-1">Task update: 2 (Task #2)</el-menu-item>
+        <el-menu-item index="9-1">Task update: 2 (Task #2)<el-badge class="ml-2" :value="'unread'"></el-badge></el-menu-item>
         <el-menu-item index="9-2">Task update: 2 (Task #2)</el-menu-item>
+        <el-menu-item index="9-3">Task update: 2 (Task #2)</el-menu-item>
+        <el-menu-item index="9-4">Task update: 2 (Task #2)</el-menu-item>
+        <el-menu-item index="9-5">Task update: 2 (Task #2)</el-menu-item>
+        <el-menu-item @click="openDrawer" index="9-6" class="color-burlywood">View all notifications <i class="el-icon-caret-right"></i></el-menu-item>
       </el-submenu>
     </el-menu>
-    <router-view class="main-page"></router-view>
+    <router-view class="main-page scroll-auto"></router-view>
+    <el-drawer
+        title="I am the title"
+        :visible.sync="drawer"
+        :with-header="false">
+      <div>Manager request</div>
+      <div>Manager request</div>
+      <div>Manager request</div>
+      <div>Manager request</div>
+    </el-drawer>
   </div>
 </template>
 
@@ -60,7 +73,8 @@ export default {
       activeIndex2: '3',
       avatar: require('@/../public/avatar_mc.png'),
       uri: process.env.CLIENT_URL,
-      logo: logo
+      logo: logo,
+      drawer: false
     };
   },
   methods: {
@@ -85,7 +99,10 @@ export default {
     },
     ...mapActions([
       AUTH.LOGOUT
-    ])
+    ]),
+    openDrawer(){
+      this.drawer = true
+    }
   },
   created() {
     this.avatar = process.env.VUE_APP_BASE_URL + this.avatar
