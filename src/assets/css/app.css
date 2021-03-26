@@ -26,7 +26,7 @@
     transform: translate(-50%, -50%);
 }
 .text-left {
-    text-align: left;
+    text-align: left !important;
 }
 .font-size-30 {
     font-size: 30px !important;
@@ -98,7 +98,7 @@
     margin-top: 1rem;
 }
 .color-y {
-    color: #DE9260;
+    color: #DE9260 !important;
 }
 .bg-tool-gray {
     background-color: #E6E7E8 !important;
@@ -133,4 +133,16 @@
 }
 .el-breadcrumb-hover:hover {
     color: burlywood !important;
+}
+.item-space-between {
+    justify-content: space-between;
+}
+.color-burlywood {
+    color: burlywood !important;
+}
+.border-end {
+    border-bottom: #545c64 solid 1px;
+}
+.font-size-20 {
+    font-size: 20px;
 }
