@@ -11,6 +11,8 @@ import Company from "@/views/Company";
 import Overview from "@/views/Overview";
 import People from "@/views/People";
 import ImageManagement from "@/views/Image";
+import ProjectSetting from "@/views/ProjectSetting";
+import Profile from "@/views/Profile";
 
 Vue.use(VueRouter)
 
@@ -24,7 +26,9 @@ const routes = [
             { path: 'company', component: Company, name: 'company', meta: { requiresAuth: true } },
             { path: 'login', component: Login , name: 'login', meta: { requiresAuth: false } },
             { path: 'people', component: People, name: 'member', meta: { requiresAuth: true } },
-            { path: 'image', component: ImageManagement, name: 'image', meta: { requiresAuth: true } }
+            { path: 'image', component: ImageManagement, name: 'image', meta: { requiresAuth: true } },
+            { path: 'setting', component: ProjectSetting, name: 'setting', meta: { requiresAuth: true } },
+            { path: 'profile', component: Profile, name: 'profile', meta: { requiresAuth: true } }
         ]
     },
     { path: '/401', component: Page401, meta: { requiresAuth: false } },

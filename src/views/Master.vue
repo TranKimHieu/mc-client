@@ -23,11 +23,11 @@
         <span><i class="el-icon-switch-button font-size-30"></i></span>
       </el-menu-item>
 
-      <el-menu-item v-if="isLogin()" class="float-right" index="7">
+      <el-menu-item @click="handleClickPage('setting')" v-if="isLogin()" class="float-right" index="7">
         <span><i class="el-icon-setting font-size-30"></i></span>
       </el-menu-item>
 
-      <el-menu-item v-if="isLogin()" class="float-right" index="8">
+      <el-menu-item @click="handleClickPage('profile')" v-if="isLogin()" class="float-right" index="8">
         <span><i class="el-icon-user font-size-30"></i></span>
       </el-menu-item>
 
