@@ -50,10 +50,10 @@
         title="I am the title"
         :visible.sync="drawer"
         :with-header="false">
-      <div>Manager request</div>
-      <div>Manager request</div>
-      <div>Manager request</div>
-      <div>Manager request</div>
+      <div class="text-center font-size-30">Notifications</div>
+      <ul class="infinite-list" v-infinite-scroll="load" >
+        <li :key="i" v-for="i in listNotifications" class="infinite-list-item pointer hover-shadow">Chỉ huy trưởng yêu cầu gửi ảnh {{ i }} <el-badge class="ml-2" :value="'unread'"></el-badge></li>
+      </ul>
     </el-drawer>
   </div>
 </template>
@@ -74,10 +74,14 @@ export default {
       avatar: require('@/../public/avatar_mc.png'),
       uri: process.env.CLIENT_URL,
       logo: logo,
-      drawer: false
+      drawer: false,
+      listNotifications: 0
     };
   },
   methods: {
+    load () {
+      this.listNotifications += 2
+    },
     logout() {
       this[AUTH.LOGOUT]().then(() => {
         removeToken()
@@ -129,5 +133,25 @@ export default {
   top: 0; /* Position the navbar at the top of the page */
   width: 100%; /* Full width */
   z-index: 100;
+}
+
+.infinite-list {
+  height: calc(100vh - 34px);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow: auto;
+}
+.infinite-list .infinite-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background: #e8f3fe;
+  margin: 10px;
+  color: #7dbcfc;
+}
+.el-drawer__wrapper ::v-deep .el-drawer {
+  overflow: auto;
 }
 </style>
