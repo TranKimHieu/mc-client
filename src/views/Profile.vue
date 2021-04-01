@@ -5,19 +5,19 @@
     </div>
     <div class="el-col-10 el-col-offset-6 mt-2rem">
       <el-form ref="form" :model="form" label-width="120px">
-        <el-form-item label="Full name">
+        <el-form-item label-width="150px" label="Full name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="Address">
+        <el-form-item label-width="150px" label="Address">
           <el-input v-model="form.address"></el-input>
         </el-form-item>
-        <el-form-item label="Phone number">
+        <el-form-item label-width="150px" label="Phone number">
           <el-input v-model="form.phone"></el-input>
         </el-form-item>
-        <el-form-item label="Phone number">
-          <el-input v-model="form.password"></el-input>
+        <el-form-item label-width="150px" label="Password">
+          <el-input type="password" v-model="form.password"></el-input>
         </el-form-item>
-        <el-form-item label="Phone number">
+        <el-form-item label-width="150px" label="Confirm password">
           <el-input type="password" v-model="form.confirmPassword"></el-input>
         </el-form-item>
         <el-form-item>
