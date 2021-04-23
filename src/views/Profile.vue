@@ -6,6 +6,9 @@
     <div class="el-col-10 el-col-offset-6 mt-2rem">
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item label-width="150px" label="Full name">
+          <el-input v-model="form.email"></el-input>
+        </el-form-item>
+        <el-form-item label-width="150px" label="Full name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label-width="150px" label="Address">
@@ -39,7 +42,8 @@ export default {
         address: '',
         phone: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        email: ''
       }
     }
   },

@@ -42,20 +42,24 @@
       <el-col :span="stateMember ? 4 : 6">
         <button type="button" class="el-button el-button--primary is-round float-right">
           <span><i class="el-icon-circle-plus"></i></span>
-          <span class="ml-2">Add member</span>
+          <span class="ml-2" v-if="stateMember">Add member</span>
+          <span class="ml-2" v-if="!stateMember">Add team</span>
         </button>
       </el-col>
     </div>
     <UserTable v-if="stateMember"></UserTable>
+    <TeamTable v-if="!stateMember"></TeamTable>
   </div>
 </template>
 
 <script>
 import UserTable from "@/components/UserTable";
+import TeamTable from "@/components/TeamTable";
 
 export default {
   name: "People",
   components: {
+    TeamTable,
     UserTable
   },
   data() {

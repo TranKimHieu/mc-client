@@ -5,8 +5,14 @@
     </div>
     <div class="el-col-10 el-col-offset-6 mt-2rem">
       <el-form ref="form" :model="form" label-width="120px">
-        <el-form-item label="Project name">
+        <el-form-item label="Code">
+          <el-input v-model="form.code"></el-input>
+        </el-form-item>
+        <el-form-item label="Name">
           <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="Manager">
+          <el-input v-model="form.manager"></el-input>
         </el-form-item>
         <el-form-item label="Schedule">
           <div class="block">
@@ -51,7 +57,9 @@ export default {
         name: '',
         address: '',
         captain: '',
-        date: ''
+        date: '',
+        code: '',
+        manager: ''
       }
     }
   },
