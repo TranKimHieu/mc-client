@@ -36,6 +36,32 @@
               </div>
             </div>
           </el-col>
+          <el-col :span="16">
+            <el-table
+                    border
+                    :data="tableData"
+                    :height=calcTableHeight
+                    style="width: 100%">
+              <el-table-column
+                      prop="task_name"
+                      label="Task name"
+                      width="180">
+              </el-table-column>
+              <el-table-column
+                      prop="progress"
+                      label="Progress"
+                      width="180">
+              </el-table-column>
+              <el-table-column
+                      prop="state"
+                      label="State">
+              </el-table-column>
+              <el-table-column
+                      prop="assignee"
+                      label="Assignee">
+              </el-table-column>
+            </el-table>
+          </el-col>
         </div>
       </el-col>
     </el-row>
@@ -52,11 +78,36 @@ export default {
         {label: 'In progress', value: 60, color: '#f5f531'},
         {label: 'Completed', value: 30, color: '#59de16'},
         {label: 'Delayed', value: 10, color: '#e02664'},
-
-      ]
+      ],
+      tableData: [{
+        task_name: 'Task 1',
+        progress: '20 %',
+        state: 'Delayed 6 days',
+        assignee: 'HieuTK'
+      },],
+      tableHeight: 500
     };
   },
-  components: {}
+  methods: {
+  },
+  created() {
+    for(let i=0; i<50; i++) {
+      this.tableData.push({
+        task_name: 'Task 1',
+        progress: '20 %',
+        state: 'Delayed 6 days',
+        assignee: 'HieuTK'
+      })
+    }
+  },
+  computed: {
+    calcTableHeight() {
+      return window.innerHeight - 60
+    }
+  },
+  watch: {
+
+  }
 }
 </script>
 

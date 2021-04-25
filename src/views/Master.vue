@@ -1,7 +1,7 @@
 <template>
-  <div id="master">
+  <div id="master" v-loading="loading">
     <el-menu
-        :default-active="activeIndex2"
+        :default-active="active"
         class="el-menu-demo header border-none"
         mode="horizontal"
         @select="handleSelect"
@@ -10,8 +10,8 @@
         active-text-color="#ffd04b">
       <el-menu-item index="1" @click="handleClickPage('company')">
         <el-image :src="logo" style="width: 57px; color: aliceblue"></el-image>
-        <span v-if="isLogin()">Project 1</span>
-        <span v-else>CM System</span>
+        <span v-if="isLogin()">{{project.data.name}}</span>
+        <span v-else>VCM System</span>
       </el-menu-item>
 
       <el-menu-item v-if="isLogin()" @click="handleClickPage('overview')" index="2">Overview</el-menu-item>
@@ -62,7 +62,7 @@
 
 import {AUTH} from "@/store/action-types";
 import {removeToken} from "@/helper/auth";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import logo from '@/assets/logo_2.svg'
 import {authCheck} from "@/helper/auth";
 
@@ -70,24 +70,32 @@ export default {
   name: "Master",
   data() {
     return {
-      activeIndex2: '3',
+      active: '3',
       avatar: require('@/../public/avatar_mc.png'),
       uri: process.env.CLIENT_URL,
       logo: logo,
       drawer: false,
-      listNotifications: 0
+      listNotifications: 0,
+      listNameNavigation: {
+        "company": "1",
+        "overview": "2",
+        "schedule": "3",
+        "member": "4",
+        "image": "5",
+        "setting": "7",
+        "profile": "8",
+      },
+      loading: false
     };
   },
   methods: {
     load () {
       this.listNotifications += 2
     },
-    logout() {
-      this[AUTH.LOGOUT]().then(() => {
-        removeToken()
-      }).then(() => {
-        this.$router.push({name: 'login'})
-      })
+    async logout() {
+      await this[AUTH.LOGOUT]();
+      removeToken()
+      this.$router.push({name: 'login'})
     },
     // eslint-disable-next-line no-unused-vars
     handleSelect(key, keyPath) {
@@ -110,6 +118,21 @@ export default {
   },
   created() {
     this.avatar = process.env.VUE_APP_BASE_URL + this.avatar
+    this.$bus.on('change_loading', (isLoading) => {
+      this.loading = isLoading
+      console.log(isLoading)
+    })
+  },
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    $route (to, from){
+      this.active = this.listNameNavigation[this.$router.history.current.name]
+    }
+  },
+  computed: {
+    ...mapState([
+      'project'
+    ])
   }
 }
 </script>
@@ -132,7 +155,7 @@ export default {
   position: fixed; /* Set the navbar to fixed position */
   top: 0; /* Position the navbar at the top of the page */
   width: 100%; /* Full width */
-  z-index: 100;
+  z-index: 1;
 }
 
 .infinite-list {

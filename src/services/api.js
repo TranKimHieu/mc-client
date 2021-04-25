@@ -7,3 +7,7 @@ export const api = axios.create({
         'X-Requested-With': 'XMLHttpRequest',
     },
 });
+
+export const setApiToken = (token) => {
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+};

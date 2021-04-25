@@ -146,3 +146,6 @@
 .font-size-20 {
     font-size: 20px;
 }
+.el-loading-mask {
+    position: fixed !important;
+}

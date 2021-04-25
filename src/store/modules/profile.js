@@ -1,6 +1,6 @@
 import {
 ADD_USER
-} from "@/store/muation-types";
+} from "@/store/mutation-types";
 
 const state = {
     data: {

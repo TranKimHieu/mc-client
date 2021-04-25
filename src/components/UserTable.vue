@@ -81,7 +81,7 @@ export default {
     calcTableHeight() {
       let eMaster = document.getElementById("master");
       let y = eMaster?.offsetHeight ?? 500;
-      return (y - 3*16 - 40);
+      return (y - 2*16 - 40);
     }
   },
   mounted() {
