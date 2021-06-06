@@ -37,12 +37,8 @@
             <i class="el-icon-bell font-size-30"><el-badge :value="10" :max="10" class="item"></el-badge></i>
           </span>
         </template>
-        <el-menu-item index="9-1">Task update: 2 (Task #2)<el-badge class="ml-2" :value="'unread'"></el-badge></el-menu-item>
-        <el-menu-item index="9-2">Task update: 2 (Task #2)</el-menu-item>
-        <el-menu-item index="9-3">Task update: 2 (Task #2)</el-menu-item>
-        <el-menu-item index="9-4">Task update: 2 (Task #2)</el-menu-item>
-        <el-menu-item index="9-5">Task update: 2 (Task #2)</el-menu-item>
-        <el-menu-item @click="openDrawer" index="9-6" class="color-burlywood">View all notifications <i class="el-icon-caret-right"></i></el-menu-item>
+        <el-menu-item @click="readNotifycation(index)" :key="index" v-for="index in 6" index="9-1">{{getNotify(index)}}<el-badge v-if="getNotify(index)" class="ml-2" :value="'unread'"></el-badge></el-menu-item>
+        <el-menu-item v-if="listNotifications.length > 5" @click="openDrawer" index="9-6" class="color-burlywood">View all notifications <i class="el-icon-caret-right"></i></el-menu-item>
       </el-submenu>
     </el-menu>
     <router-view class="main-page scroll-auto"></router-view>
@@ -52,7 +48,7 @@
         :with-header="false">
       <div class="text-center font-size-30">Notifications</div>
       <ul class="infinite-list" v-infinite-scroll="load" >
-        <li :key="i" v-for="i in listNotifications" class="infinite-list-item pointer hover-shadow">Chỉ huy trưởng yêu cầu gửi ảnh {{ i }} <el-badge class="ml-2" :value="'unread'"></el-badge></li>
+        <li :key="i.id" v-for="i in listNotifications" class="infinite-list-item pointer hover-shadow">{{i.content}} <el-badge class="ml-2" :value="'unread'"></el-badge></li>
       </ul>
     </el-drawer>
   </div>
@@ -65,6 +61,7 @@ import {removeToken} from "@/helper/auth";
 import {mapActions, mapState} from "vuex";
 import logo from '@/assets/logo_2.svg'
 import {authCheck} from "@/helper/auth";
+import {getMyNotification} from "../services/notificationService";
 
 export default {
   name: "Master",
@@ -90,7 +87,7 @@ export default {
   },
   methods: {
     load () {
-      this.listNotifications += 2
+      // this.listNotifications += 2
     },
     async logout() {
       await this[AUTH.LOGOUT]();
@@ -114,14 +111,32 @@ export default {
     ]),
     openDrawer(){
       this.drawer = true
+    },
+    getNotify(index){
+      if(this.listNotifications[index-1]) {
+        return this.listNotifications[index-1].content
+      } else {
+        return ''
+      }
+    },
+    readNotifycation(index) {
+      this.handleClickPage(this.listNotifications[index-1].path)
     }
   },
   created() {
     this.avatar = process.env.VUE_APP_BASE_URL + this.avatar
     this.$bus.on('change_loading', (isLoading) => {
       this.loading = isLoading
-      console.log(isLoading)
     })
+  },
+  async mounted() {
+    try {
+      let user = JSON.parse(localStorage.getItem('user'))
+      const res = await getMyNotification(user.id)
+      this.listNotifications = res.data
+    } catch (e) {
+      console.log(e)
+    }
   },
   watch: {
     // eslint-disable-next-line no-unused-vars

@@ -14,7 +14,8 @@ const state = {
 
 const mutations = {
     [MT_PROJECT.ADD] (state, project) {
-        state.data = {...state.data, ...project}
+        state.data = project
+        localStorage.setItem('current-project', JSON.stringify(project))
     }
 }
 

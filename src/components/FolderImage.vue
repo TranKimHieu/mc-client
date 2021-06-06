@@ -1,16 +1,16 @@
 <template>
     <div class="tile is-ancestor">
       <div class="tile is-10 is-vertical is-parent h-100 bg-images scroll-auto">
-        <div class="viewer-wrapper">
+        <div class="viewer-wrapper h-100">
           <viewer :options="options" :images="images"
                   @inited="inited"
                   class="viewer" ref="viewer"
           >
             <template slot-scope="scope">
               <div class="images">
-                <div class="image-wrapper" v-for="{source, thumbnail} in scope.images" :key="source">
+                <div class="image-wrapper" v-for="{id, url} in scope.images" :key="id">
                   <img class="image"
-                       :src="thumbnail" :data-source="source" :alt="source.split('?image=').pop()"
+                       :src="url" :data-source="url" :alt="id"
                   >
                 </div>
               </div>
@@ -22,39 +22,6 @@
 </template>
 
 <script>
-import test1 from '@/assets/test/test1.jpeg'
-import test2 from '@/assets/test/test2.jpeg'
-import test3 from '@/assets/test/test3.jpeg'
-import test4 from '@/assets/test/test4.jpeg'
-import test5 from '@/assets/test/test5.jpeg'
-import test6 from '@/assets/test/test6.jpeg'
-const sourceImages = []
-for (let i = 0; i < 20; i++) {
-  sourceImages.push({
-    thumbnail: test1,
-    source: test1
-  })
-  sourceImages.push({
-    thumbnail: test2,
-    source: test2
-  })
-  sourceImages.push({
-    thumbnail: test3,
-    source: test3
-  })
-  sourceImages.push({
-    thumbnail: test4,
-    source: test4
-  })
-  sourceImages.push({
-    thumbnail: test5,
-    source: test5
-  })
-  sourceImages.push({
-    thumbnail: test6,
-    source: test6
-  })
-}
 export default {
   name: 'folderImage',
   data () {
@@ -98,8 +65,11 @@ export default {
         keyboard: true,
         url: 'data-source'
       },
-      images: [...sourceImages].splice(0, 100)
+      images: []
     }
+  },
+  props: {
+    imageSource: Array
   },
   computed: {
   },
@@ -146,6 +116,9 @@ export default {
     tooltip () {
       this.$viewer.tooltip()
     },
+  },
+  created() {
+    this.images = this.imageSource
   }
 }
 </script>

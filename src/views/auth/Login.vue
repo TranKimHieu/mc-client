@@ -49,6 +49,7 @@ export default {
        await this[ADD_USER]({email: "hieutk", fullName: "tran kim hieu"})
        this.$bus.emit('change_loading', false)
        setToken(res.data.token)
+       await localStorage.setItem('user', JSON.stringify(res.data.user))
        this.$router.push({name: 'company'})
      } catch (e) {
        console.log('error')

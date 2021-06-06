@@ -17,17 +17,17 @@
             </el-row>
 
             <el-row >
-              <div class="font-bold" style="font-size: 2rem; margin: 0;">2</div>
+              <div class="font-bold" style="font-size: 2rem; margin: 0;">{{currentProject.remaining}}</div>
               <div style="font-size: x-large;">days remaining</div>
-              <div class="mt-3 font-bold" style="font-size: 1rem;">18 Mar 2021</div>
+              <div class="mt-3 font-bold" style="font-size: 1rem;">{{currentProject.end_date}}</div>
               <div>Scheduled end date</div>
-              <div style="margin-top: 1rem; font-size: 1rem">30% completed</div>
-              <div style="font-size: 1rem">60% In progress</div>
-              <div style="font-size: 1rem">10% Delayed</div>
+              <div style="margin-top: 1rem; font-size: 1rem">{{getProgress(this.taskStatus.completed)}}% completed</div>
+              <div style="font-size: 1rem">{{getProgress(this.taskStatus.inProgress)}}% In progress</div>
+              <div style="font-size: 1rem">{{100 - getProgress(this.taskStatus.inProgress) - getProgress(this.taskStatus.completed)}}% Delayed</div>
             </el-row>
             <div style="height: calc(100% - 312px); margin-top: 2rem" class="block-center-parent">
               <div class="block-center-child">
-                <vc-donut background="white" foreground="grey"
+                <vc-donut :key="keyDonut" background="white" foreground="grey"
                           :size="200" unit="px" :thickness="30"
                           has-legend legend-placement="top"
                           :sections="sections" :total="100"
@@ -70,35 +70,102 @@
 
 <script>
 
+import {getTaskInProject} from "../services/taskService";
+
 export default {
   name: 'Home',
   data() {
     return {
       sections: [
-        {label: 'In progress', value: 60, color: '#f5f531'},
-        {label: 'Completed', value: 30, color: '#59de16'},
-        {label: 'Delayed', value: 10, color: '#e02664'},
+        {label: 'In progress', value: 0, color: '#f5f531'},
+        {label: 'Completed', value: 0, color: '#59de16'},
+        {label: 'Delayed', value: 0, color: '#e02664'},
       ],
-      tableData: [{
-        task_name: 'Task 1',
-        progress: '20 %',
-        state: 'Delayed 6 days',
-        assignee: 'HieuTK'
-      },],
-      tableHeight: 500
+      tableData: [],
+      tableHeight: 500,
+      taskStatus: {
+        total: 0,
+        inProgress: 0,
+        completed: 0,
+        delay: 0
+      },
+      currentProject: '',
+      keyDonut: 1
     };
   },
   methods: {
-  },
-  created() {
-    for(let i=0; i<50; i++) {
-      this.tableData.push({
-        task_name: 'Task 1',
-        progress: '20 %',
-        state: 'Delayed 6 days',
-        assignee: 'HieuTK'
-      })
+    getStatus(task) {
+      let endDate = new Date(task.end_date)
+      let now = new Date()
+      if(endDate < now && task.progress < 1){
+        //delay
+        return 1
+      } else if (task.progress === 1) {
+        //completed
+        return 2
+      } else {
+        //inprogress
+        return 3
+      }
+    },
+    getProgress(status){
+      return Math.floor(this.taskStatus.total === 0 ? 0 : status / this.taskStatus.total * 100)
+    },
+    fetchDonit(){
+      this.sections[2].value = this.getProgress(this.taskStatus.delay)
+      this.sections[1].value = this.getProgress(this.taskStatus.completed)
+      this.sections[0].value = 100 - this.getProgress(this.taskStatus.delay) - this.getProgress(this.taskStatus.completed)
+    },
+    handleData(task) {
+      this.taskStatus.total++
+      let endDate = new Date(task.end_date)
+      let stateMessage = ''
+      switch (this.getStatus(task)) {
+        case 1:
+          stateMessage = 'Delayed ' + endDate.toDateString()
+          this.taskStatus.delay++
+          break;
+        case 2:
+          stateMessage = 'Completed'
+          this.taskStatus.completed++
+          break;
+        case 3:
+          stateMessage = 'Inprogress'
+          this.taskStatus.inProgress++
+          break;
+      }
+      return {
+        task_name: task.title,
+        progress: task.progress*100,
+        state: stateMessage,
+        assignee: task.assignee_obj.name
+      }
     }
+  },
+  async created() {
+    try {
+      this.$bus.emit('change_loading', true)
+      let project = JSON.parse(localStorage.getItem('current-project'));
+      this.currentProject = project
+      const tasksRes = await getTaskInProject(project.id)
+      tasksRes.data.filter(task => {
+        this.tableData.push(this.handleData(task))
+      })
+      this.fetchDonit()
+      this.keyDonut++
+    } catch (e) {
+      console.log(e)
+    } finally {
+      this.$bus.emit('change_loading', false)
+    }
+    // for(let i=0; i<50; i++) {
+    //   this.tableData.push({
+    //     task_name: 'Task 1',
+    //     progress: '20 %',
+    //     state: 'Delayed 6 days',
+    //     assignee: 'HieuTK'
+    //   })
+    // }
   },
   computed: {
     calcTableHeight() {
