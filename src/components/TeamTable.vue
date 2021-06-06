@@ -1,7 +1,7 @@
 <template>
     <div class="el-col-24 mt-2">
         <el-table
-                :data="tableData"
+                :data="teams"
                 style="width: 100%"
                 class="table-member"
                 :max-height="calcTableHeight()"
@@ -60,17 +60,11 @@
         name: "TeamTable",
         data() {
             return {
-                tableData: [
-                    {
-                        name: 'Team 1',
-                        leader: 'Tom',
-                        category: 'Chuyên nghiệp',
-                        description: 'Xây thô...',
-                        total_member: '45',
-                        created_at: '24-04-2021'
-                    },
-
-                ],
+            }
+        },
+        props: {
+            teams: {
+                default: []
             }
         }
         ,
@@ -85,17 +79,17 @@
             }
         },
         mounted() {
-            // eslint-disable-next-line no-undef,no-unused-vars
-            for (let i = 0; i<10; i++) {
-                this.tableData.push({
-                    name: 'Team 1',
-                    leader: 'Tom',
-                    category: 'Chuyên nghiệp',
-                    description: 'Xây thô...',
-                    total_member: '45',
-                    created_at: '24-04-2021'
-                },)
-            }
+            // // eslint-disable-next-line no-undef,no-unused-vars
+            // for (let i = 0; i<10; i++) {
+            //     this.tableData.push({
+            //         name: 'Team 1',
+            //         leader: 'Tom',
+            //         category: 'Chuyên nghiệp',
+            //         description: 'Xây thô...',
+            //         total_member: '45',
+            //         created_at: '24-04-2021'
+            //     },)
+            // }
         }
     }
 </script>

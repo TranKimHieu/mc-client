@@ -3,3 +3,4 @@ export const USER_ROLES = {
     TEAM_LEADER: 2,
     EMPLOYEE: 3,
 }
+

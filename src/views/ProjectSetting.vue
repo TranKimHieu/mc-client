@@ -12,7 +12,7 @@
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="Manager">
-          <el-input v-model="form.manager"></el-input>
+          <el-input v-model="form.captain_info.name"></el-input>
         </el-form-item>
         <el-form-item label="Schedule">
           <div class="block">
@@ -32,12 +32,9 @@
         <el-form-item label="Project address">
           <el-input v-model="form.address"></el-input>
         </el-form-item>
-        <el-form-item label="Project captain">
-          <el-input v-model="form.captain"></el-input>
-        </el-form-item>
-        <el-form-item>
+        <el-form-item class="mb-2">
           <el-button type="warning" @click="onSubmit()">Save</el-button>
-          <el-button>Cancel</el-button>
+          <el-button @click="$router.push({name: 'schedule'})">Cancel</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -67,6 +64,11 @@ export default {
     onSubmit() {
       console.log(this.form)
     }
+  },
+  created() {
+    let project = JSON.parse(localStorage.getItem('current-project'))
+    this.form.date = [new Date(project.start_date), new Date(project.end_date)]
+    this.form = {...this.form, ...project}
   }
 }
 </script>

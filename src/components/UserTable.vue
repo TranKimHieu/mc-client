@@ -1,7 +1,7 @@
 <template>
     <div class="el-col-24 mt-2">
       <el-table
-          :data="tableData"
+          :data="users"
           style="width: 100%"
           class="table-member"
           :max-height="calcTableHeight()"
@@ -27,7 +27,7 @@
             width="300">
         </el-table-column>
         <el-table-column
-            prop="role"
+            prop="role_name"
             label="Role"
             width="300">
         </el-table-column>
@@ -61,19 +61,14 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          name: 'Tom',
-          email: 'Tom@gmail',
-          phone: '01212111',
-          address: 'No. 189, Grove St, Los Angeles',
-          role: 'User',
-          created_at: '24-04-2021'
-        },
-
       ],
     }
-  }
-  ,
+  },
+  props: {
+    users: {
+      default: []
+    }
+  },
   methods: {
     deleteRow() {
 
@@ -85,18 +80,20 @@ export default {
     }
   },
   mounted() {
-    // eslint-disable-next-line no-undef,no-unused-vars
-    for (let i = 0; i<10; i++) {
-      console.log('ll')
-      this.tableData.push({
-        name: 'Tom',
-        email: 'Tom@gmail',
-        phone: '01212111',
-        address: 'No. 189, Grove St, Los Angeles',
-        role: 'User',
-        created_at: '24-04-2021'
-      },)
-    }
+    // // eslint-disable-next-line no-undef,no-unused-vars
+    // for (let i = 0; i<10; i++) {
+    //   console.log('ll')
+    //   this.tableData.push({
+    //     name: 'Tom',
+    //     email: 'Tom@gmail',
+    //     phone: '01212111',
+    //     address: 'No. 189, Grove St, Los Angeles',
+    //     role: 'User',
+    //     created_at: '24-04-2021'
+    //   },)
+    // }
+  },
+  created() {
   }
 }
 </script>

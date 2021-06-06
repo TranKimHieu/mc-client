@@ -129,8 +129,8 @@
                 </div>
             </div>
             <div slot="footer">
-                <el-button type="warning" @click="submitCreateTask()">Save</el-button>
-                <el-button>Cancel</el-button>
+                <el-button :loading="isLoadingBtnSend" type="warning" @click="submitCreateTask()">Save</el-button>
+                <el-button @click="togglePopup()">Cancel</el-button>
             </div>
         </Popup>
         <Gantt :removeLeft="removeLeft" :unit="unit" class="left-container" :tasks="tasks"></Gantt>
@@ -240,7 +240,7 @@
 
             async submitCreateTask(){
                 try {
-                    this.$bus.emit('change_loading', true)
+                    this.isLoadingBtnSend = true
                     let project = JSON.parse(localStorage.getItem('current-project'));
                     const taskPayload = await storeTask({
                         "title": this.formTask.title,
@@ -254,18 +254,38 @@
                         "task_parent_id": this.formTask.parentId
                     })
                     taskPayload.data.filter(task => {
-                        gantt.addTask(task)
+                        gantt.addTask(this.handleTypeTask(task))
                     })
                 } catch (e) {
                     console.log(e)
                 } finally {
-                    this.$bus.emit('change_loading', false)
+                    this.isLoadingBtnSend = false
                     this.togglePopup()
                 }
             },
 
             togglePopup() {
                 this.isVisiblePopup = !this.isVisiblePopup
+            },
+
+            handleTypeTask(task){
+                const types = {
+                    project: 1,
+                    milestone: 2,
+                    task: 3
+                }
+                switch (task.type_id) {
+                    case types.project:
+                        task.type = gantt.config.types.project
+                        break;
+                    case types.milestone:
+                        task.type = gantt.config.types.milestone
+                        break;
+                    case types.task:
+                        task.type = gantt.config.types.task
+                        break;
+                }
+                return task
             }
         },
         async created() {
@@ -276,7 +296,11 @@
                 this.users = resUsers.data
                 let project = JSON.parse(localStorage.getItem('current-project'));
                 const tasksRes = await getTaskInProject(project.id)
-                this.tasks.data = tasksRes.data
+
+                tasksRes.data.filter(taskTemp => {
+                    this.tasks.data.push(this.handleTypeTask(taskTemp))
+                })
+
                 // console.log(tasksRes.data)
                 // for (let i = 8; i < 100; i++) {
                 //   this.tasks.data.push({id: i, text: 'Task #2', start_date: '2021-03-23', duration: 3, progress: 0.4, users: 'hieutk'})

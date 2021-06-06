@@ -25,7 +25,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="warning" @click="onSubmit()">Save</el-button>
-          <el-button>Cancel</el-button>
+          <el-button @click="$router.push({name: 'schedule'})">Cancel</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -51,6 +51,10 @@ export default {
     onSubmit() {
       console.log(this.form)
     }
+  },
+  created() {
+    let user = JSON.parse(localStorage.getItem('user'))
+    this.form = user
   }
 }
 </script>
