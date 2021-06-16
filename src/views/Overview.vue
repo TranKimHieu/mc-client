@@ -11,7 +11,105 @@
               <el-col class="text-right pointer" :span="12">
                 <span>
                   <i class="el-icon-pie-chart mr-2"></i>
-                  <span>Export PDF</span>
+                      <generate-report>
+                        <div class="p-4" slot="content">
+                            <h1 class="text-center w-100">{{currentProject.name}}</h1>
+                            <el-row>
+                              <div class="font-bold"
+                                   style="font-size: 2rem; margin: 0;">{{currentProject.remaining}}</div>
+                              <div style="font-size: x-large;">days remaining</div>
+                              <div class="mt-3 font-bold" style="font-size: 1rem;">{{currentProject.end_date}}</div>
+                              <div>Scheduled end date</div>
+                              <div style="margin-top: 1rem; font-size: 1rem">{{getProgress(this.taskStatus.completed)}}% Completed</div>
+                              <div style="font-size: 1rem">{{getProgress(this.taskStatus.inProgress)}}% In progress</div>
+                              <div style="font-size: 1rem">{{100 - getProgress(this.taskStatus.inProgress) - getProgress(this.taskStatus.completed)}}% Delayed</div>
+                            </el-row>
+                            <div style="margin-top: 2rem">
+                              <div>
+                                <vc-donut :key="keyDonut" background="white" foreground="grey"
+                                          :size="200" unit="px" :thickness="30"
+                                          has-legend legend-placement="top"
+
+                                          :sections="sections" :total="100"
+                                          :start-angle="0" :auto-adjust-text-size="true">
+                                </vc-donut>
+                              </div>
+                            </div>
+                            <h2>Delayed</h2>
+                               <el-table
+                                       border
+                                       :data="getTaskDelayed('delayed')"
+                                       style="width: 100%">
+                                  <el-table-column
+                                          prop="task_name"
+                                          label="Task name"
+                                          width="180">
+                                  </el-table-column>
+                                  <el-table-column
+                                          prop="progress_percent"
+                                          label="Progress"
+                                          width="180">
+                                  </el-table-column>
+                                  <el-table-column
+                                          prop="state"
+                                          label="State">
+                                  </el-table-column>
+                                  <el-table-column
+                                          prop="assignee"
+                                          label="Assignee">
+                                  </el-table-column>
+                            </el-table>
+                            <h2 class="mt-2">Completed</h2>
+                           <el-table
+                                   border
+                                   :data="getTaskDelayed('completed')"
+                                   style="width: 100%">
+                              <el-table-column
+                                      prop="task_name"
+                                      label="Task name"
+                                      width="180">
+                              </el-table-column>
+                              <el-table-column
+                                      prop="progress_percent"
+                                      label="Progress"
+                                      width="180">
+                              </el-table-column>
+                              <el-table-column
+                                      prop="state"
+                                      label="State">
+                              </el-table-column>
+                              <el-table-column
+                                      prop="assignee"
+                                      label="Assignee">
+                              </el-table-column>
+                        </el-table>
+                            <h2 class="mt-2">In Procgress</h2>
+                           <el-table
+                                   border
+                                   :data="getTaskDelayed('inprogress')"
+                                   style="width: 100%">
+                              <el-table-column
+                                      prop="task_name"
+                                      label="Task name"
+                                      width="180">
+                              </el-table-column>
+                              <el-table-column
+                                      prop="progress_percent"
+                                      label="Progress"
+                                      width="180">
+                              </el-table-column>
+                              <el-table-column
+                                      prop="state"
+                                      label="State">
+                              </el-table-column>
+                              <el-table-column
+                                      prop="assignee"
+                                      label="Assignee">
+                              </el-table-column>
+                        </el-table>
+                    </div>
+                  </generate-report>
+                  <span @click="gotoGenerate()">Export PDF</span>
                 </span>
               </el-col>
             </el-row>
@@ -49,7 +147,7 @@
                       width="180">
               </el-table-column>
               <el-table-column
-                      prop="progress"
+                      prop="progress_percent"
                       label="Progress"
                       width="180">
               </el-table-column>
@@ -72,9 +170,11 @@
 <script>
 
 import {getTaskInProject} from "../services/taskService";
+import GenerateReport from "./GenerateReport";
 
 export default {
   name: 'Home',
+  components: {GenerateReport},
   data() {
     return {
       sections: [
@@ -136,12 +236,35 @@ export default {
           break;
       }
       return {
-        task_name: task.title,
-        progress: task.progress*100,
-        state: stateMessage,
-        assignee: task.assignee_obj.name
+            task_name: task.title,
+            progress_percent: task.progress*100,
+            state: stateMessage,
+            assignee: task.assignee_obj.name,
+            ...task
       }
-    }
+    },
+    gotoGenerate() {
+      this.$bus.emit('generate-report', this.tableData)
+    },
+      getTaskDelayed(status) {
+        switch (status) {
+            case 'delayed':
+                // eslint-disable-next-line no-case-declarations
+                return this.tableData.filter(task => {
+                    return this.getStatus(task) === 1
+                })
+            case 'inprogress':
+                return this.tableData.filter(task => {
+                    return this.getStatus(task) === 3
+                })
+            case 'completed':
+                return this.tableData.filter(task => {
+                    return this.getStatus(task) === 2
+                })
+        }
+
+      }
+
   },
   async created() {
     try {
