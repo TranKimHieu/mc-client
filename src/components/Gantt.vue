@@ -32,7 +32,7 @@ export default {
   methods: {
     $_customConfigGannt() {
       gantt.templates.task_text = (start,end,task) => {
-        return "<b>Title:</b> "+task.text+",<b> Assignee:</b> "+task.users;
+        return "<b>Title:</b> "+task.text+",<b> Assignee:</b> "+task.assignee_obj.name;
       }
       gantt.plugins({
         marker: true

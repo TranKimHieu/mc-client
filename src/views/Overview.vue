@@ -21,7 +21,7 @@
               <div style="font-size: x-large;">days remaining</div>
               <div class="mt-3 font-bold" style="font-size: 1rem;">{{currentProject.end_date}}</div>
               <div>Scheduled end date</div>
-              <div style="margin-top: 1rem; font-size: 1rem">{{getProgress(this.taskStatus.completed)}}% completed</div>
+              <div style="margin-top: 1rem; font-size: 1rem">{{getProgress(this.taskStatus.completed)}}% Completed</div>
               <div style="font-size: 1rem">{{getProgress(this.taskStatus.inProgress)}}% In progress</div>
               <div style="font-size: 1rem">{{100 - getProgress(this.taskStatus.inProgress) - getProgress(this.taskStatus.completed)}}% Delayed</div>
             </el-row>
@@ -30,6 +30,7 @@
                 <vc-donut :key="keyDonut" background="white" foreground="grey"
                           :size="200" unit="px" :thickness="30"
                           has-legend legend-placement="top"
+
                           :sections="sections" :total="100"
                           :start-angle="0" :auto-adjust-text-size="true">
                 </vc-donut>
@@ -100,7 +101,7 @@ export default {
       if(endDate < now && task.progress < 1){
         //delay
         return 1
-      } else if (task.progress === 1) {
+      } else if (task.progress == 1) {
         //completed
         return 2
       } else {

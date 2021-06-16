@@ -27,7 +27,7 @@
             <div class="gantt-selected-info">
                 <div v-if="selectedTask">
                     <h2>{{ selectedTask.text }}</h2>
-                    <span class="text-left"><label>Assignee</label><p>{{ selectedTask.users }}</p></span>
+                    <span><b>Assignee: </b>{{ selectedTask.assignee_obj.name }}</span><br/>
                     <span><b>Code: </b>{{ selectedTask.code }}</span><br/>
                     <p class="font-bold">Description</p>
                     <p>{{ selectedTask.title }}</p>
@@ -35,11 +35,11 @@
                     <span><b>Start Date: </b>{{ selectedTask.start_date|niceDate }}</span><br/>
                     <span><b>End Date: </b>{{ selectedTask.end_date|niceDate }}</span><br/>
                     <div class="d-flex mw-100 scroll-auto">
-                        <div class="p-1 pointer" v-for="(o) in 6"
-                             :key="o">
+                        <div class="p-1 pointer" v-for="(o) in selectedTask.images"
+                             :key="o.id">
                             <el-image
                                     style="width: 100px; height: 100px"
-                                    :src="imageDemo"
+                                    :src="o.url"
                                     fit="fill">
                             </el-image>
                         </div>
@@ -53,15 +53,17 @@
                     </el-form-item>
                     <el-upload
                             class="avatar-uploader"
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            action='http://localhost:8000/api/image/store'
+                            :data="{taskId: selectedTask.id}"
+                            :on-success="uploadImageSuccess"
                             :show-file-list="true">
                         <i class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                     <el-form-item label="Comment">
-                        <el-input type="textarea" v-model="form.desc"></el-input>
+                        <el-input type="textarea" v-model="comment"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary">Comment</el-button>
+                        <el-button @click="submitComment()" type="primary">Comment</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -189,7 +191,8 @@
                 users: [],
                 isVisiblePopup: false,
                 isLoadingBtnSend: false,
-                user: ''
+                user: '',
+                comment: ''
             }
         },
         filters: {
@@ -286,6 +289,22 @@
                         break;
                 }
                 return task
+            },
+
+            submitComment(){
+                this.addMessage(this.comment)
+                this.comment = ''
+            },
+
+            uploadImageSuccess(response)
+            {
+                this.tasks.data.filter((task, key) => {
+                    if(task.id == response.task_id) {
+                        task.images.push(response)
+                        this.tasks.data[key] = task
+                        this.selectedTask.images.push(response)
+                    }
+                })
             }
         },
         async created() {

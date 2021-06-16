@@ -1,5 +1,7 @@
 import axios from "axios";
 import {Message} from 'element-ui'
+import main_app from '../main'
+
 const api = axios.create({
     baseURL: process.env.API,
     timeout: 30000,
@@ -28,7 +30,7 @@ api.interceptors.response.use(
         switch (error.response.status) {
             case 401:
                 localStorage.removeItem('token')
-                this.$router.push({name: 'login'})
+                main_app.$router.push({name: 'login'})
                 break;
         }
         Message({
