@@ -27,7 +27,7 @@ api.interceptors.response.use(
         return response;
     },
     error => {
-        switch (error.response.status) {
+        switch (error?.response?.status) {
             case 401:
                 localStorage.removeItem('token')
                 main_app.$router.push({name: 'login'})

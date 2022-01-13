@@ -53,6 +53,8 @@ export default {
        this.$router.push({name: 'company'})
      } catch (e) {
        console.log('error')
+     } finally {
+       this.$bus.emit('change_loading', false)
      }
 
    },
