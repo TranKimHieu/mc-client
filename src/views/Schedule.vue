@@ -53,7 +53,7 @@
                     </el-form-item>
                     <el-upload
                             class="avatar-uploader"
-                            action='http://localhost:8000/api/image/store'
+                            action='http://149.28.132.49/api/image/store'
                             :data="{taskId: selectedTask.id}"
                             :on-success="uploadImageSuccess"
                             :show-file-list="true">
