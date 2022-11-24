@@ -1,30 +1,24 @@
 <template>
     <div class="el-col-24 mt-2">
       <el-table
-          :data="tableData"
+          :data="users"
           style="width: 100%"
           class="table-member"
           :max-height="calcTableHeight()"
       >
-        <el-table-column
-            fixed
-            prop="date"
-            label="Date"
-            width="200">
-        </el-table-column>
         <el-table-column
             prop="name"
             label="Name"
             width="300">
         </el-table-column>
         <el-table-column
-            prop="state"
-            label="State"
+            prop="email"
+            label="Email"
             width="300">
         </el-table-column>
         <el-table-column
-            prop="city"
-            label="City"
+            prop="phone"
+            label="Cell Phone"
             width="300">
         </el-table-column>
         <el-table-column
@@ -33,9 +27,14 @@
             width="300">
         </el-table-column>
         <el-table-column
-            prop="zip"
-            label="Zip"
+            prop="role_name"
+            label="Role"
             width="300">
+        </el-table-column>
+        <el-table-column
+                prop="created_at"
+                label="Created at"
+                width="200">
         </el-table-column>
         <el-table-column
             fixed="right"
@@ -62,60 +61,14 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          date: '2016-05-03',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-02',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-01',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-08',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-06',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-07',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }
       ],
     }
-  }
-  ,
+  },
+  props: {
+    users: {
+      default: []
+    }
+  },
   methods: {
     deleteRow() {
 
@@ -123,22 +76,24 @@ export default {
     calcTableHeight() {
       let eMaster = document.getElementById("master");
       let y = eMaster?.offsetHeight ?? 500;
-      return (y - 3*16 - 40);
+      return (y - 2*16 - 40);
     }
   },
   mounted() {
-    // eslint-disable-next-line no-undef,no-unused-vars
-    for (let i = 0; i<10; i++) {
-      console.log('ll')
-      this.tableData.push({
-        date: '2016-05-03',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036'
-      })
-    }
+    // // eslint-disable-next-line no-undef,no-unused-vars
+    // for (let i = 0; i<10; i++) {
+    //   console.log('ll')
+    //   this.tableData.push({
+    //     name: 'Tom',
+    //     email: 'Tom@gmail',
+    //     phone: '01212111',
+    //     address: 'No. 189, Grove St, Los Angeles',
+    //     role: 'User',
+    //     created_at: '24-04-2021'
+    //   },)
+    // }
+  },
+  created() {
   }
 }
 </script>

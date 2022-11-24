@@ -1,3 +1,4 @@
+
 export const authCheck = () => {
     const token = localStorage.getItem('token')
     return !!(token)

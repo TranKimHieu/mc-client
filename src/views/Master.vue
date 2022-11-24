@@ -1,7 +1,7 @@
 <template>
-  <div id="master">
+  <div id="master" v-loading="loading">
     <el-menu
-        :default-active="activeIndex2"
+        :default-active="active"
         class="el-menu-demo header border-none"
         mode="horizontal"
         @select="handleSelect"
@@ -10,8 +10,8 @@
         active-text-color="#ffd04b">
       <el-menu-item index="1" @click="handleClickPage('company')">
         <el-image :src="logo" style="width: 57px; color: aliceblue"></el-image>
-        <span v-if="isLogin()">Project 1</span>
-        <span v-else>CM System</span>
+        <span v-if="isLogin()">{{project.data.name}}</span>
+        <span v-else>VCM System</span>
       </el-menu-item>
 
       <el-menu-item v-if="isLogin()" @click="handleClickPage('overview')" index="2">Overview</el-menu-item>
@@ -23,11 +23,11 @@
         <span><i class="el-icon-switch-button font-size-30"></i></span>
       </el-menu-item>
 
-      <el-menu-item v-if="isLogin()" class="float-right" index="7">
+      <el-menu-item @click="handleClickPage('setting')" v-if="isLogin()" class="float-right" index="7">
         <span><i class="el-icon-setting font-size-30"></i></span>
       </el-menu-item>
 
-      <el-menu-item v-if="isLogin()" class="float-right" index="8">
+      <el-menu-item @click="handleClickPage('profile')" v-if="isLogin()" class="float-right" index="8">
         <span><i class="el-icon-user font-size-30"></i></span>
       </el-menu-item>
 
@@ -37,11 +37,20 @@
             <i class="el-icon-bell font-size-30"><el-badge :value="10" :max="10" class="item"></el-badge></i>
           </span>
         </template>
-        <el-menu-item index="9-1">Task update: 2 (Task #2)</el-menu-item>
-        <el-menu-item index="9-2">Task update: 2 (Task #2)</el-menu-item>
+        <el-menu-item @click="readNotifycation(index)" :key="index" v-for="index in 6" index="9-1">{{getNotify(index)}}<el-badge v-if="getNotify(index)" class="ml-2" :value="'unread'"></el-badge></el-menu-item>
+        <el-menu-item v-if="listNotifications.length > 5" @click="openDrawer" index="9-6" class="color-burlywood">View all notifications <i class="el-icon-caret-right"></i></el-menu-item>
       </el-submenu>
     </el-menu>
-    <router-view class="main-page"></router-view>
+    <router-view class="main-page scroll-auto"></router-view>
+    <el-drawer
+        title="I am the title"
+        :visible.sync="drawer"
+        :with-header="false">
+      <div class="text-center font-size-30">Notifications</div>
+      <ul class="infinite-list" v-infinite-scroll="load" >
+        <li :key="i.id" v-for="i in listNotifications" class="infinite-list-item pointer hover-shadow">{{i.content}} <el-badge class="ml-2" :value="'unread'"></el-badge></li>
+      </ul>
+    </el-drawer>
   </div>
 </template>
 
@@ -49,27 +58,41 @@
 
 import {AUTH} from "@/store/action-types";
 import {removeToken} from "@/helper/auth";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import logo from '@/assets/logo_2.svg'
 import {authCheck} from "@/helper/auth";
+import {getMyNotification} from "../services/notificationService";
 
 export default {
   name: "Master",
   data() {
     return {
-      activeIndex2: '3',
+      active: '3',
       avatar: require('@/../public/avatar_mc.png'),
       uri: process.env.CLIENT_URL,
-      logo: logo
+      logo: logo,
+      drawer: false,
+      listNotifications: 0,
+      listNameNavigation: {
+        "company": "1",
+        "overview": "2",
+        "schedule": "3",
+        "member": "4",
+        "image": "5",
+        "setting": "7",
+        "profile": "8",
+      },
+      loading: false
     };
   },
   methods: {
-    logout() {
-      this[AUTH.LOGOUT]().then(() => {
-        removeToken()
-      }).then(() => {
-        this.$router.push({name: 'login'})
-      })
+    load () {
+      // this.listNotifications += 2
+    },
+    async logout() {
+      await this[AUTH.LOGOUT]();
+      removeToken()
+      this.$router.push({name: 'login'})
     },
     // eslint-disable-next-line no-unused-vars
     handleSelect(key, keyPath) {
@@ -85,10 +108,46 @@ export default {
     },
     ...mapActions([
       AUTH.LOGOUT
-    ])
+    ]),
+    openDrawer(){
+      this.drawer = true
+    },
+    getNotify(index){
+      if(this.listNotifications[index-1]) {
+        return this.listNotifications[index-1].content
+      } else {
+        return ''
+      }
+    },
+    readNotifycation(index) {
+      this.handleClickPage(this.listNotifications[index-1].path)
+    }
   },
   created() {
     this.avatar = process.env.VUE_APP_BASE_URL + this.avatar
+    this.$bus.on('change_loading', (isLoading) => {
+      this.loading = isLoading
+    })
+  },
+  async mounted() {
+    try {
+      let user = JSON.parse(localStorage.getItem('user'))
+      const res = await getMyNotification(user.id)
+      this.listNotifications = res.data
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    $route (to, from){
+      this.active = this.listNameNavigation[this.$router.history.current.name]
+    }
+  },
+  computed: {
+    ...mapState([
+      'project'
+    ])
   }
 }
 </script>
@@ -111,6 +170,26 @@ export default {
   position: fixed; /* Set the navbar to fixed position */
   top: 0; /* Position the navbar at the top of the page */
   width: 100%; /* Full width */
-  z-index: 100;
+  z-index: 1;
+}
+
+.infinite-list {
+  height: calc(100vh - 34px);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow: auto;
+}
+.infinite-list .infinite-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background: #e8f3fe;
+  margin: 10px;
+  color: #7dbcfc;
+}
+.el-drawer__wrapper ::v-deep .el-drawer {
+  overflow: auto;
 }
 </style>

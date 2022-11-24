@@ -4,6 +4,8 @@
 
 <script>
 import 'dhtmlx-gantt'
+// eslint-disable-next-line no-unused-vars
+import {storeTask} from "../services/taskService";
 export default {
   name: 'Gantt',
   data(){
@@ -30,7 +32,7 @@ export default {
   methods: {
     $_customConfigGannt() {
       gantt.templates.task_text = (start,end,task) => {
-        return "<b>Title:</b> "+task.text+",<b> Assignee:</b> "+task.users;
+        return "<b>Title:</b> "+task.text+",<b> Assignee:</b> "+task.assignee_obj.name;
       }
       gantt.plugins({
         marker: true
@@ -61,16 +63,16 @@ export default {
         ]
       }
 
-      gantt.config.lightbox.sections = [
-        {name: "type", type: "typeselect", map_to: "type"},
-        {name:"description", height:38, map_to:"text", type:"textarea", focus:true},
-        {name:"assignee", height:22, map_to:"assignee", type:"select", options: [
-            {key:1, label: "Hieutk1"},
-            {key:2, label: "Hieutk2"},
-            {key:3, label: "Hieutk3"}
-          ]},
-        {name:"time", height:72, type:"duration", map_to:"auto"}
-      ];
+      // gantt.config.lightbox.sections = [
+      //   {name: "type", type: "typeselect", map_to: "type"},
+      //   {name:"description", height:38, map_to:"text", type:"textarea", focus:true},
+      //   {name:"assignee", height:22, map_to:"assignee", type:"select", options: [
+      //       {key:1, label: "Hieutk1"},
+      //       {key:2, label: "Hieutk2"},
+      //       {key:3, label: "Hieutk3"}
+      //     ]},
+      //   {name:"time", height:72, type:"duration", map_to:"auto"}
+      // ];
       gantt.locale.labels.section_assignee = "Assignee";
 
       gantt.attachEvent("onGanttReady", function(){
@@ -107,24 +109,66 @@ export default {
         });
 
         // eslint-disable-next-line no-unused-vars
-        gantt.attachEvent("onAfterTaskAdd", function(id, item){
-          gantt.render()
+        // gantt.attachEvent("onAfterTaskAdd", function(id, item){
+        //   gantt.render()
+        // });
+
+        gantt.attachEvent("onLightbox", function (task_id){
+          console.log(['----', task_id])
         });
+
+        // gantt.attachEvent("onBeforeLightbox", function (){
+        //   gantt.resetLightbox();
+        //   // var task = gantt.getTask(task_id);
+        //   // if (task.restricted ==true){
+        //   //   gantt.config.lightbox.sections = restricted_lightbox;
+        //   // } else {
+        //   //   gantt.config.lightbox.sections = full_lightbox;
+        //   // };
+        //   return true;
+        // });
+        // eslint-disable-next-line no-unused-vars
+        gantt.attachEvent("onBeforeLightbox", function (id){
+          //any custom logic here
+          return false;
+        });
+
+        // eslint-disable-next-line no-unused-vars
+        gantt.attachEvent("onAfterLightbox", function (id){
+          //any custom logic here
+          return false;
+        });
+
+
+        // gantt.attachEvent("onBeforeLightbox", function(id, item) {
+        //
+        //   // return true;
+        // });
+
+        // eslint-disable-next-line no-unused-vars
+        gantt.attachEvent("onBeforeTaskAdd", async (id, task) => {
+        })
 
         // eslint-disable-next-line no-unused-vars
         gantt.attachEvent("onAfterTaskUpdate", function(id,item){
           gantt.render()
         });
 
-        gantt.attachEvent("onLightboxButton", function(button_id, node, e){
-          console.log(button_id)
-          if(button_id === "complete_button"){
-            console.log([node, e])
-            // var id = gantt.getState().lightbox;
-            // gantt.getTask(id).progress = 1;
-            // gantt.updateTask(id);
-            // gantt.hideLightbox();
-          }
+        // gantt.attachEvent("onLightboxButton", function(button_id, node, e){
+        //   console.log(button_id)
+        //   if(button_id === "complete_button"){
+        //     console.log([node, e])
+        //     // var id = gantt.getState().lightbox;
+        //     // gantt.getTask(id).progress = 1;
+        //     // gantt.updateTask(id);
+        //     // gantt.hideLightbox();
+        //   }
+        // });
+
+
+        gantt.attachEvent("onTaskCreated", (task) => {
+          this.$bus.emit('task-created', task.parent)
+          return false
         });
 
         gantt.$_eventsInitialized = true;
@@ -135,6 +179,9 @@ export default {
       if (!gantt.$_dataProcessorInitialized) {
         gantt.createDataProcessor((entity, action, data, id) => {
           this.$bus.emit(`${entity}-updated`, id, action, data);
+          // if(action === 'create') {
+          //   this.$bus.emit('task-created', data)
+          // }
         });
 
         gantt.$_dataProcessorInitialized = true;
@@ -192,8 +239,15 @@ export default {
     gantt.init(this.$refs.gantt);
     gantt.parse(this.$props.tasks);
     this.$_initDataProcessor();
-
   },
+
+  created() {
+    let that = this
+    this.$bus.on('reload', function () {
+      gantt.init(that.$refs.gantt);
+      gantt.parse(that.$props.tasks);
+    })
+  }
 }
 </script>
 

@@ -1,6 +1,7 @@
 import {
     AUTH
 } from "@/store/action-types";
+import {api} from "../../services/api";
 
 const state = {
 
@@ -12,17 +13,7 @@ const mutations = {
 
 const actions = {
     [AUTH.LOGIN] (context, payload) {
-        return new Promise((resolve, reject) => {
-            // eslint-disable-next-line no-unused-vars
-            let data = payload;
-            data = null
-            // eslint-disable-next-line no-constant-condition
-            if(true) {
-                resolve({token: "abc"})
-            }else {
-                reject()
-            }
-        })
+        return api.post(`${process.env.VUE_APP_API}/auth/login`, payload)
     },
     [AUTH.LOGOUT] () {
         return new Promise((resolve) => {

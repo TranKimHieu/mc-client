@@ -1,7 +1,7 @@
 <template>
   <el-row type="flex" class="h-100">
     <el-col class="block-center-parent background-login" :span="14">
-      <p class="text-center" style="font-size: 50px; font-weight: bold">CM System</p>
+      <p class="text-center" style="font-size: 50px; font-weight: bold">VCM System</p>
       <el-image class="block-center-child" :src="background"></el-image>
     </el-col>
     <el-col :span="10" class="block-center-parent">
@@ -9,8 +9,8 @@
         <el-col :span="16" :offset="4" class="mb-2">
           <h1 class="text-center">Login</h1>
           <el-form>
-            <el-form-item label="Username">
-              <el-input v-model="username" placeholder="Enter username"></el-input>
+            <el-form-item label="Email">
+              <el-input v-model="email" placeholder="Enter email"></el-input>
             </el-form-item>
             <el-form-item label="Password">
               <el-input v-model="password" type="password" placeholder="Enter password"></el-input>
@@ -28,7 +28,7 @@
 <script>
 import {mapActions, mapState, mapMutations} from 'vuex'
 import {AUTH} from "@/store/action-types";
-import {ADD_USER} from "@/store/muation-types";
+import {ADD_USER} from "@/store/mutation-types";
 import {setToken} from "@/helper/auth";
 import background from '@/assets/bg_2.svg'
 
@@ -36,20 +36,26 @@ export default {
   name: "Login",
   data() {
     return {
-      username: null,
+      email: null,
       password: null,
       background: background
     }
   },
   methods: {
-    login() {
-      this[AUTH.LOGIN]({username: this.username, password: this.password}).then((data) => {
-        this[ADD_USER]({username: "hieutk", fullName: "tran kim hieu"})
-        setToken(data.token)
-      }).then(() => {
-        this.$router.push({name: 'company'})
-      })
-    },
+   async login() {
+     this.$bus.emit('change_loading', true)
+     try {
+       const res = await this[AUTH.LOGIN]({email: this.email, password: this.password})
+       await this[ADD_USER]({email: "hieutk", fullName: "tran kim hieu"})
+       this.$bus.emit('change_loading', false)
+       setToken(res.data.token)
+       await localStorage.setItem('user', JSON.stringify(res.data.user))
+       this.$router.push({name: 'company'})
+     } catch (e) {
+       console.log('error')
+     }
+
+   },
     ...mapActions([
       AUTH.LOGIN
     ]),
